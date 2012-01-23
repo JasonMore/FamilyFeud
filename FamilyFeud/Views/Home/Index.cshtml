@@ -24,7 +24,7 @@
     </div>
     <div class="three columns">
     <div class="center">
-        <input class="family" type="text" value="Family 1" />
+        <input class="family" type="text" data-bind="text:familyOneName" />
         <div>
             <a id="family1WrongAnswer" href="#" class="hiddenButton wrongAnswer"></a>
             <h2 id="family1Score" class="score" data-bind="text:familyOneScore"></h2>
@@ -42,7 +42,7 @@
             <div class="answerNumber" data-bind="visible: $parent.showAnswerNumber(isAvailable)">
                 <h2 data-bind="text: answerNumber"></h2>
             </div>
-            <div class="answer" data-bind="visible: $parent.isHost || showAnswer">
+            <div class="answer" data-bind="visible: $parent.showAnswerText(showAnswer)">
                 <div class="answerText">    
                     <p data-bind="text: text"></p>
                 </div>
@@ -61,7 +61,7 @@
     </div>
 
     <div class="three columns center">
-        <input class="family" type="text" value="Family 2" />
+        <input class="family" type="text" data-bind="text:familyTwoName" />
         <div>
             <a id="family2WrongAnswer" href="#" class="hiddenButton wrongAnswer"></a>
             <h2 id="family2Score" class="score" data-bind="text:familyTwoScore"></h2>

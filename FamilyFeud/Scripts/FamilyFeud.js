@@ -69,9 +69,16 @@ $(function () {
             selectedAnswer.showAnswer(true);
         }
 
+        this.hub.gotFamilyNames = function(dtoFamilyNames) {
+            self.familyOneName(dtoFamilyNames.family1);
+            self.familyTwoName(dtoFamilyNames.family2);
+        }
+
         //properties
         this.familyOneScore = ko.observable(0);
         this.familyTwoScore = ko.observable(0);
+        this.familyOneName = ko.observable('Family One');
+        this.familyTwoName = ko.observable('Family Two');
         this.currentGameIndex = ko.observable(0);
         this.isHost = ko.observable(false);
         this.games = ko.observableArray([
@@ -87,6 +94,16 @@ $(function () {
                 new answerViewModel(8, '', '', false)
                 ])]);
 
+        //subscriptions
+        this.familyOneName.subscribe(function(value) {
+                this.hub.sendFamilyNames({family1: this.familyOneName(), family2: this.familyTwoName()} )
+                .done(function() {
+                    console.log('Sent Names!');
+                }).fail(function(e) {
+                    console.warn(e);
+                });
+        });
+
         //clicks
         this.answerClick = function(answer,e) {
             var dtoAnswer = ko.mapping.toJS(answer);
@@ -98,14 +115,23 @@ $(function () {
         }
 
         this.setHostClick = function() {
-            
+            self.isHost(true);
         }
 
         //methods
         this.showAnswerNumber = function(isAvailable) {
-            alert(isAvailable);
+            if (self.isHost()) {
+                return false;
+            }
+            return isAvailable;
         }
 
+        this.showAnswerText = function(showAnswer) {
+            if(self.isHost()) {
+                return true;
+            }
+            return showAnswer;
+        }
 
         //computed
         this.isAudience = ko.computed(function() {
@@ -154,6 +180,9 @@ $(function () {
     var viewModel = new viewModel();
 
     ko.applyBindings(viewModel);
-    $.connection.hub.start(function () { viewModel.init(); });
+    $.connection.hub.start(function () { 
+        viewModel.init(); 
+        self.notify = true;
+    });
 
 });

@@ -5,6 +5,7 @@ using System.Web;
 using SignalR.Hubs;
 using FamilyFeud.Service.Services;
 using FamilyFeud.Service.Models;
+using FamilyFeud.Service.ViewModels;
 
 namespace FamilyFeud.Hubs
 {
@@ -38,6 +39,20 @@ namespace FamilyFeud.Hubs
             catch (Exception)
             {
                 Caller.reportError("Unable to show answer;");
+                return false;
+            }
+        }
+
+        public bool SendFamilyNames(FamilyNames familyNames)
+        {
+            try
+            {
+                Clients.gotFamilyNames(familyNames);
+                return true;
+            }
+            catch (Exception)
+            {
+                Caller.reportError("Unable to send Family Names");
                 return false;
             }
         }
