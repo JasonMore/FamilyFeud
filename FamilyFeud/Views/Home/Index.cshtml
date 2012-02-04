@@ -25,9 +25,9 @@
     <div class="three columns center">
         <input class="family" type="text" data-bind="value:familyOneName, valueUpdate: 'afterkeydown', click:clearFamilyOneName" />
         <div>
+            <h2 id="family1Score" class="score" data-bind="text:familyOneScore"></h2>
             <div class="resetButton" data-bind="visible: isHost">Add Score<a href="#" class="hiddenButton" data-bind="click:giveScoreFamilyOne"></a></div>
             <div class="resetButton" data-bind="visible: isHost">Take Score<a href="#" class="hiddenButton" data-bind="click:removeScoreFamilyOne"></a></div>
-            <h2 id="family1Score" class="score" data-bind="text:familyOneScore"></h2>
             <div class="resetButton" data-bind="visible: isHost">Buzz!<a href="#" class="hiddenButton" data-bind="click:buzzFamilyOne"></a></div>
         </div>
         <div>
@@ -45,7 +45,7 @@
             <div class="answerNumber" data-bind="visible: $parent.showAnswerNumber(isAvailable)">
                 <h2 data-bind="text: answerNumber"></h2>
             </div>
-            <div class="answer" data-bind="visible: $parent.showAnswerText(showAnswer)">
+            <div class="answer" data-bind="visible: $parent.showAnswerText(showAnswer), css: { glow: showAnswer }">
                 <div class="answerText">    
                     <p data-bind="text: text"></p>
                 </div>
@@ -66,9 +66,9 @@
     <div class="three columns center">
         <input class="family" type="text" data-bind="value:familyTwoName, valueUpdate: 'afterkeydown', click:clearFamilyTwoName" />
         <div>
+            <h2 id="family2Score" class="score" data-bind="text:familyTwoScore"></h2>
             <div class="resetButton" data-bind="visible: isHost">Add Score<a href="#" class="hiddenButton" data-bind="click:giveScoreFamilyTwo"></a></div>
             <div class="resetButton" data-bind="visible: isHost">Take Score<a href="#" class="hiddenButton" data-bind="click:removeScoreFamilyTwo"></a></div>
-            <h2 id="family2Score" class="score" data-bind="text:familyTwoScore"></h2>
             <div class="resetButton" data-bind="visible: isHost">Buzz!<a href="#" class="hiddenButton" data-bind="click:buzzFamilyTwo"></a></div>
         </div>
         <div>

@@ -206,6 +206,13 @@ div.miniScore p
     font-size:1.5em;
 }
 
+div.glow
+{
+    -webkit-box-shadow:0 0 15px #ffffff; 
+    -moz-box-shadow: 0 0 15px #ffffff; 
+    box-shadow:0 0 15px #ffffff; 
+}
+
 ul.numberWrong
 {
     text-align:center;
