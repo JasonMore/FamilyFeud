@@ -3,7 +3,7 @@
 }
 
 <script src="Scripts/jquery-1.7.1.js"></script>
-<script src="Scripts/knockout-2.0.0.js"></script>
+<script src="Scripts/knockout-2.0.0.debug.js"></script>
 <script src="Scripts/knockout.mapping-latest.js"></script>
 <script src="Scripts/jquery.signalR.js"></script>
 <script src="/signalr/hubs" type="text/javascript"></script>
@@ -16,25 +16,28 @@
     <div class="sixteen columns">
     <div id="error" class="validation-summary-errors"></div>
         <div class="totalScore center">
-            <h1 id="totalScore" class="score total center" data-bind="text: totalScore">
+            <h1 id="totalScore" class="score total center" data-bind="text: roundScore">
                 </h1>
         </div>
     </div>
     <div class="clear">
     </div>
-    <div class="three columns">
-    <div class="center">
-        <input class="family" type="text" data-bind="text:familyOneName" />
+    <div class="three columns center">
+        <input class="family" type="text" data-bind="value:familyOneName, valueUpdate: 'afterkeydown', click:clearFamilyOneName" />
         <div>
-            <a id="family1WrongAnswer" href="#" class="hiddenButton wrongAnswer"></a>
+            <div class="resetButton" data-bind="visible: isHost">Add Score<a href="#" class="hiddenButton" data-bind="click:giveScoreFamilyOne"></a></div>
+            <div class="resetButton" data-bind="visible: isHost">Take Score<a href="#" class="hiddenButton" data-bind="click:removeScoreFamilyOne"></a></div>
             <h2 id="family1Score" class="score" data-bind="text:familyOneScore"></h2>
+            <div class="resetButton" data-bind="visible: isHost">Buzz!<a href="#" class="hiddenButton" data-bind="click:buzzFamilyOne"></a></div>
         </div>
-    </div>
-    <ul id="family1WrongAnswers" class="numberWrong">
-        <li style="display:none">x</li>
-        <li style="display:none">x</li>
-        <li style="display:none">x</li>
-    </ul>
+        <div>
+            <ul id="family1WrongAnswers" class="numberWrong">
+                <a href="#" class="hiddenButton" data-bind="click:removeFamilyOneWrongAnswer"></a>
+                <li style="display:none">x</li>
+                <li style="display:none">x</li>
+                <li style="display:none">x</li>
+            </ul>
+        </div>
     </div>
     <script type="text/html" id="answer-template">
         <li>
@@ -61,16 +64,21 @@
     </div>
 
     <div class="three columns center">
-        <input class="family" type="text" data-bind="text:familyTwoName" />
+        <input class="family" type="text" data-bind="value:familyTwoName, valueUpdate: 'afterkeydown', click:clearFamilyTwoName" />
         <div>
-            <a id="family2WrongAnswer" href="#" class="hiddenButton wrongAnswer"></a>
+            <div class="resetButton" data-bind="visible: isHost">Add Score<a href="#" class="hiddenButton" data-bind="click:giveScoreFamilyTwo"></a></div>
+            <div class="resetButton" data-bind="visible: isHost">Take Score<a href="#" class="hiddenButton" data-bind="click:removeScoreFamilyTwo"></a></div>
             <h2 id="family2Score" class="score" data-bind="text:familyTwoScore"></h2>
+            <div class="resetButton" data-bind="visible: isHost">Buzz!<a href="#" class="hiddenButton" data-bind="click:buzzFamilyTwo"></a></div>
         </div>
-        <ul id="family2WrongAnswers" class="numberWrong">
-            <li style="display:none">x</li>
-            <li style="display:none">x</li>
-            <li style="display:none">x</li>
-        </ul>
+        <div>
+            <ul id="family2WrongAnswers" class="numberWrong">
+                <a href="#" class="hiddenButton" data-bind="click:removeFamilyTwoWrongAnswer"></a>
+                <li style="display:none">x</li>
+                <li style="display:none">x</li>
+                <li style="display:none">x</li>
+            </ul>
+        </div>
     </div>
     <div class="sixteen columns center">
     <h3 data-bind="text:questionText"></h3>
