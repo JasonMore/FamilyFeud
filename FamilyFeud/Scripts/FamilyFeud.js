@@ -77,7 +77,7 @@ $(function () {
             
             if (selectedAnswer.showAnswer()) {
 
-                //answer already shown
+                //answer already shown 
                 selectedAnswer.showAnswer(false);
                 self.roundScore(self.roundScore() - selectedAnswer.points);
             } else {
