@@ -181,7 +181,7 @@ $(function () {
         }
 
         this.hub.gotRemoveScoreFamilyOne = function() {
-            self.familyTwoScore(self.familyOneScore() - self.roundScore());
+            self.familyOneScore(self.familyOneScore() - self.roundScore());
         }
 
         this.removeScoreFamilyTwo = function() {
@@ -189,7 +189,7 @@ $(function () {
         }
 
         this.hub.gotRemoveScoreFamilyTwo = function() {
-            self.familyOneScore(self.familyOneScore() - self.roundScore());
+            self.familyTwoScore(self.familyTwoScore() - self.roundScore());
         }
 
         this.setHostClick = function() {
