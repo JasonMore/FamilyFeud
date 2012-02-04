@@ -181,7 +181,7 @@ $(function () {
         }
 
         this.hub.gotRemoveScoreFamilyOne = function() {
-            self.familyOneScore(self.familyOneScore() - self.roundScore());
+            self.familyTwoScore(self.familyOneScore() - self.roundScore());
         }
 
         this.removeScoreFamilyTwo = function() {
