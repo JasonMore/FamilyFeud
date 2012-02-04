@@ -9,5 +9,6 @@ namespace FamilyFeud.Service.Models
     {
         public string QuestionText { get; set; }
         public ICollection<Answer> Answers { get; set; }
+        public int RoundScore { get; set; }
     }
 }

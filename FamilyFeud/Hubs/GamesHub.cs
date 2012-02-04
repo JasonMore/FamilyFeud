@@ -121,6 +121,16 @@ namespace FamilyFeud.Hubs
                 return false;
             }
         }
+
+        public void SendNextRound()
+        {
+            Clients.gotNextRound();
+        }
+
+        public void SendLastRound()
+        {
+            Clients.gotLastRound();
+        }
         
     }
 }

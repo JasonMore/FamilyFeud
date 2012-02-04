@@ -35,8 +35,9 @@ $(function () {
         });
     }
 
-    var gameViewModel = function (questionText, answers) {
+    var gameViewModel = function (questionText, roundScore, answers) {
         this.questionText = questionText;
+        this.roundScore = ko.observable(roundScore);
         this.answers = ko.observableArray(answers);
     }
 
@@ -63,79 +64,13 @@ $(function () {
                 var answers = $.map(dtoGame.Answers, function (dtoAnswer) {
                     return new answerViewModel(dtoAnswer.AnswerNumber, dtoAnswer.Text, dtoAnswer.Points, dtoAnswer.IsAvailable);
                 });
-                return new gameViewModel(dtoGame.QuestionText, answers);
+                return new gameViewModel(dtoGame.QuestionText, dtoGame.RoundScore, answers);
             });
 
             self.games(mappedGames);
         }
 
-        this.hub.gotShowAnswer = function(dtoAnswer) {
-            //find the answer in this model
-            var selectedAnswer = ko.utils.arrayFilter(self.currentAnswers(), function (answer) { 
-                return answer.answerNumber == dtoAnswer.AnswerNumber; 
-            })[0];
-            
-            if (selectedAnswer.showAnswer()) {
-
-                //answer already shown 
-                selectedAnswer.showAnswer(false);
-                self.roundScore(self.roundScore() - selectedAnswer.points);
-            } else {
-
-                if(self.isAudience())
-                    playEffect("bellSound");
-
-                selectedAnswer.showAnswer(true);
-                self.roundScore(self.roundScore() + selectedAnswer.points);
-            }
-
-        }
-
-        this.hub.gotGiveScoreFamilyOne = function() {
-            self.familyOneScore(self.familyOneScore() + self.roundScore());
-        }
-
-        this.hub.gotGiveScoreFamilyTwo = function() {
-            self.familyOneScore(self.familyOneScore() + self.roundScore());
-        }
-
-        this.hub.gotRemoveScoreFamilyOne = function() {
-            self.familyOneScore(self.familyOneScore() - self.roundScore());
-        }
-
-        this.hub.gotRemoveScoreFamilyTwo = function() {
-            self.familyOneScore(self.familyOneScore() - self.roundScore());
-        }
-
-        this.hub.gotFamilyNames = function(dtoFamilyNames){ 
-            self.familyOneName(dtoFamilyNames.Family1);
-            self.familyTwoName(dtoFamilyNames.Family2);
-        }
-
-        this.hub.gotBuzzFamilyOne = function() {
-            if(self.isAudience())
-                playEffect("buzzerSound");
-
-            $('#family1WrongAnswers').find('li:hidden:first').show();
-        }
-
-        this.hub.gotRemoveFamilyOneWrongAnswer = function() {
-            $('#family1WrongAnswers').find('li:visible:last').hide();
-        }
-
-        this.hub.gotBuzzFamilyTwo = function() {
-            if(self.isAudience())
-                playEffect("buzzerSound");
-
-            $('#family2WrongAnswers').find('li:hidden:first').show();
-        }
-
-        this.hub.gotRemoveFamilyTwoWrongAnswer = function() {
-            $('#family2WrongAnswers').find('li:visible:last').hide();
-        }
-
         //properties
-        this.roundScore = ko.observable(0);
         this.familyOneScore = ko.observable(0);
         this.familyTwoScore = ko.observable(0);
         this.familyOneName = ko.observable('Family One');
@@ -144,7 +79,7 @@ $(function () {
         this.isHost = ko.observable(false);
         this.games = ko.observableArray([
             //TODO: Figure out how to get rid of this fake game for binding
-            new gameViewModel('', [
+            new gameViewModel('', 0, [
                 new answerViewModel(1, '', '', false),
                 new answerViewModel(2, '', '', false),
                 new answerViewModel(3, '', '', false),
@@ -167,6 +102,11 @@ $(function () {
             }).fail(function(e) {
                 console.warn(e);
             });
+        }
+
+        this.hub.gotFamilyNames = function(dtoFamilyNames){ 
+            self.familyOneName(dtoFamilyNames.Family1);
+            self.familyTwoName(dtoFamilyNames.Family2);
         }
 
         this.familyOneName.subscribe(function(value) {
@@ -198,20 +138,58 @@ $(function () {
             });;
         }
 
+        this.hub.gotShowAnswer = function(dtoAnswer) {
+            //find the answer in this model
+            var selectedAnswer = ko.utils.arrayFilter(self.currentAnswers(), function (answer) { 
+                return answer.answerNumber == dtoAnswer.AnswerNumber; 
+            })[0];
+            
+            if (selectedAnswer.showAnswer()) {
+
+                //answer already shown 
+                selectedAnswer.showAnswer(false);
+                self.roundScore(self.roundScore() - selectedAnswer.points);
+            } else {
+
+                if(self.isAudience())
+                    playEffect("bellSound");
+
+                selectedAnswer.showAnswer(true);
+                self.roundScore(self.roundScore() + selectedAnswer.points);
+            }
+
+        }
+
         this.giveScoreFamilyOne = function() {
             self.hub.sendGiveScoreFamilyOne();
         }
 
+        this.hub.gotGiveScoreFamilyOne = function() {
+            self.familyOneScore(self.familyOneScore() + self.roundScore());
+        }
+
         this.giveScoreFamilyTwo = function() {
             self.hub.sendGiveScoreFamilyTwo();
+        }
+        
+        this.hub.gotGiveScoreFamilyTwo = function() {
+            self.familyOneScore(self.familyOneScore() + self.roundScore());
         }
 
         this.removeScoreFamilyOne = function() {
             self.hub.sendRemoveScoreFamilyOne();
         }
 
+        this.hub.gotRemoveScoreFamilyOne = function() {
+            self.familyOneScore(self.familyOneScore() - self.roundScore());
+        }
+
         this.removeScoreFamilyTwo = function() {
             self.hub.sendRemoveScoreFamilyTwo();
+        }
+
+        this.hub.gotRemoveScoreFamilyTwo = function() {
+            self.familyOneScore(self.familyOneScore() - self.roundScore());
         }
 
         this.setHostClick = function() {
@@ -230,16 +208,54 @@ $(function () {
             self.hub.sendBuzzFamilyOne();
         }
 
+        this.hub.gotBuzzFamilyOne = function() {
+            if(self.isAudience())
+                playEffect("buzzerSound");
+
+            $('#family1WrongAnswers').find('li:hidden:first').show();
+        }
+
         this.removeFamilyOneWrongAnswer = function() {
             self.hub.sendRemoveFamilyOneWrongAnswer();
+        }
+
+        this.hub.gotRemoveFamilyOneWrongAnswer = function() {
+            $('#family1WrongAnswers').find('li:visible:last').hide();
         }
 
         this.buzzFamilyTwo = function() {
             self.hub.sendBuzzFamilyTwo();
         }
 
+        this.hub.gotBuzzFamilyTwo = function() {
+            if(self.isAudience())
+                playEffect("buzzerSound");
+
+            $('#family2WrongAnswers').find('li:hidden:first').show();
+        }
+
         this.removeFamilyTwoWrongAnswer = function() {
             self.hub.sendRemoveFamilyTwoWrongAnswer();
+        }
+        
+        this.hub.gotRemoveFamilyTwoWrongAnswer = function() {
+            $('#family2WrongAnswers').find('li:visible:last').hide();
+        }
+
+        this.nextRound = function() {
+            self.hub.sendNextRound();
+        }
+
+        this.hub.gotNextRound = function() {
+            self.currentGameIndex(self.currentGameIndex() + 1);
+        }
+
+        this.lastRound = function() {
+            self.hub.sendLastRound();
+        }
+
+        this.hub.gotLastRound = function() {
+            self.currentGameIndex(self.currentGameIndex() - 1);
         }
 
         //methods
@@ -269,6 +285,17 @@ $(function () {
         this.currentAnswers = ko.computed(function() {
             return this.currentGame().answers();
         }, this);
+
+        this.roundScore = ko.computed({
+            read: function() {
+                return this.currentGame().roundScore();
+            }, 
+            write: function(value) {
+                this.currentGame().roundScore(value);
+            },
+            owner: this
+        });
+
 
         this.firstFourAnswers = ko.computed(function() {
             var answers = [ this.currentAnswers()[0], 
