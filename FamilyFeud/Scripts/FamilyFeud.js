@@ -173,7 +173,7 @@ $(function () {
         }
         
         this.hub.gotGiveScoreFamilyTwo = function() {
-            self.familyOneScore(self.familyTwoScore() + self.roundScore());
+            self.familyTwoScore(self.familyTwoScore() + self.roundScore());
         }
 
         this.removeScoreFamilyOne = function() {
