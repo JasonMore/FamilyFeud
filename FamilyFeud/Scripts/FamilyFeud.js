@@ -173,7 +173,7 @@ $(function () {
         }
         
         this.hub.gotGiveScoreFamilyTwo = function() {
-            self.familyOneScore(self.familyOneScore() + self.roundScore());
+            self.familyOneScore(self.familyTwoScore() + self.roundScore());
         }
 
         this.removeScoreFamilyOne = function() {
@@ -248,6 +248,10 @@ $(function () {
 
         this.hub.gotNextRound = function() {
             self.currentGameIndex(self.currentGameIndex() + 1);
+
+            //HACK - Move buzzers to game model
+            $('#family1WrongAnswers').find('li:visible').hide();
+            $('#family2WrongAnswers').find('li:visible').hide();
         }
 
         this.lastRound = function() {
