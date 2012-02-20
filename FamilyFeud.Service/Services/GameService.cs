@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FamilyFeud.Service.Models;
+using FamilyFeud.Service.Storage.Context;
 
 namespace FamilyFeud.Service.Services
 {
@@ -13,9 +14,17 @@ namespace FamilyFeud.Service.Services
 
     public class GameService : IGameService
     {
+		private IFamilyFeudSession _session;
+
+		public GameService(IFamilyFeudSession session)
+		{
+			_session = session;
+		}
 
         public IEnumerable<Game> GetGames()
         {
+			var dbGames = _session.All<Game>();
+
             //TODO: use repository here
             var games = new List<Game>
             { 

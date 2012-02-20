@@ -10,12 +10,16 @@ using FamilyFeud.Service.ViewModels;
 namespace FamilyFeud.Hubs
 {
     public class GamesHub : Hub
-    {
-        //HACK: Change to Dependancy Injection
-        GameService _gameService = new GameService();
+	{
+		private static readonly string AUDIENCE = "audience";
+		private static readonly string HOST = "host";
 
-        private static readonly string AUDIENCE = "audience";
-        private static readonly string HOST = "host";
+		private IGameService _gameService;
+
+		public GamesHub(IGameService gameService)
+		{
+			_gameService = gameService;
+		}
 
         public void StartConnection()
         {

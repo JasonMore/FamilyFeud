@@ -31,22 +31,63 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Devtalk.EF.CodeFirst">
+      <HintPath>..\packages\EFCodeFirst.CreateTablesOnly.1.0.2\lib\Devtalk.EF.CodeFirst.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.4.3.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Extensions.Conventions">
+      <HintPath>..\packages\Ninject.Extensions.Conventions.2.2.0.5\lib\net40-Full\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.4.4\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\DontDropDbJustCreateTablesIfModelChangedStart.cs" />
+    <Compile Include="Infrustructure\AppStart.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GameService.cs" />
+    <Compile Include="Storage\CloningCache.cs" />
+    <Compile Include="Storage\Context\FamilyFeudContext.cs" />
+    <Compile Include="Storage\Context\FamilyFeudInitializer.cs" />
+    <Compile Include="Storage\Context\FamilyFeudSession.cs" />
+    <Compile Include="Storage\EntityFrameworkCodeFirst\EFCodeFirstReadOnlySession.cs" />
+    <Compile Include="Storage\EntityFrameworkCodeFirst\EFCodeFirstSession.cs" />
+    <Compile Include="Storage\EntityFramework\EFReadOnlySession.cs" />
+    <Compile Include="Storage\EntityFramework\EFSession.cs" />
+    <Compile Include="Storage\InMemory\InMemorySession.cs" />
+    <Compile Include="Storage\IReadOnlySession.cs" />
+    <Compile Include="Storage\ISession.cs" />
     <Compile Include="ViewModels\FamilyNames.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Storage\FormsAuthentication\Principals\" />
+    <Folder Include="Storage\FormsAuthentication\Service\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
