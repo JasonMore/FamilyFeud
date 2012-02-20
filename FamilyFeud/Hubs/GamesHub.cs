@@ -27,17 +27,17 @@ namespace FamilyFeud.Hubs
             this.AddToGroup(AUDIENCE);
         }
 
-        public bool SendGetGames()
+        public bool SendGetRounds()
         {
             try
             {
-                var games = _gameService.GetGames();
-                Caller.gotGames(games);
+                var rounds = _gameService.GetRounds();
+                Caller.gotRounds(rounds);
                 return true;
             }
             catch (Exception)
             {
-                Caller.reportError("Unable to get games;");
+                Caller.reportError("Unable to get rounds;");
                 return false;
             }
         }

@@ -9,7 +9,7 @@ namespace FamilyFeud.Service.Services
 {
     public interface IGameService
     {
-        IEnumerable<Game> GetGames();
+        IEnumerable<Round> GetRounds();
     }
 
     public class GameService : IGameService
@@ -21,14 +21,14 @@ namespace FamilyFeud.Service.Services
 			_session = session;
 		}
 
-        public IEnumerable<Game> GetGames()
+        public IEnumerable<Round> GetRounds()
         {
-			var dbGames = _session.All<Game>();
+			var dbGames = _session.All<Round>();
 
             //TODO: use repository here
-            var games = new List<Game>
+            var games = new List<Round>
             { 
-                new Game
+                new Round
                 {
                     questionText = "Name a Bad Job for Someone Who's Accident Prone",
                     answers = new List<Answer>
@@ -44,7 +44,7 @@ namespace FamilyFeud.Service.Services
                     }
                 },
                 
-                new Game
+                new Round
                 {
                     questionText = "Name a Garment You'd Probably Find in the Dressing Room for a Pro Wrestling Event",
                     answers = new List<Answer>
@@ -60,7 +60,7 @@ namespace FamilyFeud.Service.Services
                     }
                 },
                 
-                new Game
+                new Round
                 {
                     questionText = "Name an Article of Clothing You Can't Wash in the Wash Machine",
                     answers = new List<Answer>
@@ -76,7 +76,7 @@ namespace FamilyFeud.Service.Services
                     }
                 },
 
-                new Game
+                new Round
                 {
                     questionText = "Name a Recreational Activity Traditionally Done in Hot Weather",
                     answers = new List<Answer>
@@ -92,7 +92,7 @@ namespace FamilyFeud.Service.Services
                     }
                 },
                 
-                new Game
+                new Round
                 {
                     questionText = "Name a Place You Visit Where You Aren't Allowed to Touch Anything",
                     answers = new List<Answer>
@@ -108,7 +108,7 @@ namespace FamilyFeud.Service.Services
                     }
                 },
                 
-                new Game
+                new Round
                 {
                     questionText = "Name a Public Place Where You're Likely to Catch a Cold or Flu Bug",
                     answers = new List<Answer>
@@ -124,7 +124,7 @@ namespace FamilyFeud.Service.Services
                     }
                 },
                 
-                new Game
+                new Round
                 {
                     questionText = "Name Something People are Often Chased by in Movies",
                     answers = new List<Answer>
@@ -140,7 +140,7 @@ namespace FamilyFeud.Service.Services
                     }
                 },
                 
-                new Game
+                new Round
                 {
                     questionText = "If You Met the Real Life Prince Charming, How Would You Know it was Him?",
                     answers = new List<Answer>
@@ -156,7 +156,7 @@ namespace FamilyFeud.Service.Services
                     }
                 },
                 
-                new Game
+                new Round
                 {
                     questionText = "Name Something that a Man Had Better Not Take Along on His Honeymoon",
                     answers = new List<Answer>
@@ -172,7 +172,7 @@ namespace FamilyFeud.Service.Services
                     }
                 },
                 
-                new Game
+                new Round
                 {
                     questionText = "Name Something a Customer Might do to Annoy a Waitress",
                     answers = new List<Answer>

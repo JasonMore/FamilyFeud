@@ -16,7 +16,7 @@
 	<div class="sixteen columns">
 	<div id="error" class="validation-summary-errors"></div>
 		<div class="totalScore center">
-			<h1 id="totalScore" class="score total center" data-bind="text: roundScore">
+			<h1 id="totalScore" class="score total center" data-bind="text: score">
 				</h1>
 		</div>
 	</div>
@@ -92,7 +92,7 @@
 	<div class="resetButton" data-bind="visible: isHost">Reset<a href="#" id="resetButton" class="hiddenButton"></a></div>
 	<div class="resetButton" data-bind="visible: isHost">Last Round<a href="#" class="hiddenButton" data-bind="click:lastRound"></a></div>
 	<div class="resetButton" data-bind="visible: isHost">Next Round<a href="#" class="hiddenButton" data-bind="click:nextRound"></a></div>
-	<div class="resetButton" data-bind="visible: isHost, text:currentGameIndex"><a href="#" id="nextRoundButton" class="hiddenButton"></a></div>
+	<div class="resetButton" data-bind="visible: isHost, text:currentRoundIndex"><a href="#" id="nextRoundButton" class="hiddenButton"></a></div>
 	</div>
 </div>
 

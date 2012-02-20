@@ -5,10 +5,8 @@ using System.Text;
 
 namespace FamilyFeud.Service.Models
 {
-    public class Game
-    {
-        public string questionText { get; set; }
-        public ICollection<Answer> answers { get; set; }
-        public int roundScore { get; set; }
-    }
+	public class Game
+	{
+		ICollection<Round> rounds { get; set; }
+	}
 }
