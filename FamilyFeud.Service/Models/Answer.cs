@@ -7,9 +7,9 @@ namespace FamilyFeud.Service.Models
 {
     public class Answer
     {
-        public int AnswerNumber { get; set; }
-        public string Text { get; set; }
-        public int Points { get; set; }
-        public bool IsAvailable { get; set; }
+        public int answerNumber { get; set; }
+        public string text { get; set; }
+        public int points { get; set; }
+        public bool isAvailable { get; set; }
     }
 }

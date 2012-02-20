@@ -72,19 +72,15 @@ namespace FamilyFeud.Hubs
             Clients.gotRemoveScoreFamilyTwo();
         }
 
-        public bool SendFamilyNames(FamilyNames familyNames)
-        {
-            try
-            {
-                Clients.gotFamilyNames(familyNames);
-                return true;
-            }
-            catch (Exception)
-            {
-                Caller.reportError("Unable to send Family Names");
-                return false;
-            }
-        }
+		public void SendFamilyOneName(string name)
+		{
+			Clients.gotFamilyOneName(name);
+		}
+
+		public void SendFamilyTwoName(string name)
+		{
+			Clients.gotFamilyTwoName(name);
+		}
 
         public void SendBuzzFamilyOne()
         {
