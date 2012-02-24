@@ -2,4 +2,44 @@
     ViewBag.Title = "Index";
 }
 
+<script src="Scripts/GameEditor.js"></script>
 
+<script type="text/html" id="roundItem-template">
+	<li>
+		<span data-bind="text: questionText, click: questionClicked" /> <a href="#">down</a> <a href="#">up</a> <a href="#">del</a>
+		<div data-bind="visible: isVisible"> 
+			<label>
+			Question
+			<textarea data-bind="text: questionText"></textarea> 
+			</label>
+			<div class="row">
+				<div class="one columns">#</div>
+				<div class="five columns"><label>Answer</label></div>
+				<div class="two columns"><label>Points</label></div>
+			</div>
+			<div data-bind="template: { name: 'answer-template', foreach: 'answers' }"></div>
+		</div>
+	</li>
+</script>
+
+<script type="text/html" id="answer-template">
+	<div class="row">
+		<div class="one columns" data-bind="text: answerNumber"></div>
+		<div class="five columns"><input type="text" data-bind="value: text" /></div>
+		<div class="two columns"><input type="text" data-bind="value: points" /></div>
+	</div>
+</script>
+
+<div class="container white">
+	@*make game*@
+	<div class="eight columns">
+		<ul data-bind="template: { name: 'roundItem-template', foreach: gameRounds }">
+		</ul>
+        <button data-bind="click:newQuestion">New Question</button>
+	</div>
+
+	@*all questions*@
+	<div class="eight columns">
+	
+	</div>
+</div>

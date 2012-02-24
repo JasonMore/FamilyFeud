@@ -48,6 +48,17 @@ div, li
     position:relative;
 }
 
+.white
+{
+	background-color:White;
+}
+
+
+
+/* #Page Styles
+================================================== */
+
+/* Board Page ============= */
 .totalScore
 {
     margin: 0px auto;
@@ -278,10 +289,6 @@ ul.numberWrong li
     padding:10px;
 }
 
-
-
-/* #Page Styles
-================================================== */
 
 /* #Media Queries
 ================================================== */

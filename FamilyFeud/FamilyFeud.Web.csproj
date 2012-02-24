@@ -192,6 +192,7 @@
     <Content Include="Images\family-feud-logo.jpg" />
     <Content Include="Images\favicon.ico" />
     <Content Include="Scripts\FamilyFeud.js" />
+    <Content Include="Scripts\GameEditor.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
@@ -222,7 +223,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
     <Content Include="Scripts\AjaxLogin.js" />
     <Content Include="Images\accent.png" />
     <Content Include="Images\bullet.png" />
