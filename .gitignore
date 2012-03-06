@@ -13,3 +13,6 @@ FamilyFeud.sln.docstates.suo
 FamilyFeud/bin/
 FamilyFeud/obj/Debug/
 FamilyFeud.suo
+*.suo
+*.suo
+FamilyFeud.suo

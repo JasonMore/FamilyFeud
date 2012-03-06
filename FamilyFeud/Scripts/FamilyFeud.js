@@ -14,58 +14,60 @@ function playEffect(x) {
 $(function () {
 
 	var answerViewModel = function(answerDto) {
+        var self = this;
+
 		//observable
-		this.isAvailable = ko.observable();
-		this._showAnswer = ko.observable();
-		this.answerNumber = ko.observable();
-		this.text = ko.observable();
-		this.points = ko.observable();
+		self.isAvailable = ko.observable();
+		self._showAnswer = ko.observable();
+		self.answerNumber = ko.observable();
+		self.text = ko.observable();
+		self.points = ko.observable();
 
 		//hydrate from dto
-		ko.mapping.fromJS(answerDto, {}, this);
+		ko.mapping.fromJS(answerDto, {}, self);
 
 		//computed
-		this.showAnswer = ko.computed({
+		self.showAnswer = ko.computed({
 			read: function() {
-				return this._showAnswer();
+				return self._showAnswer();
 			},
 			write: function(value) {
-				this._showAnswer(value);
-				this.isAvailable(!value);
-			},
-			owner: this
+				self._showAnswer(value);
+				self.isAvailable(!value);
+			}
 		});
 	};
 
 	var roundViewModel = function(roundDto, answers) {
-		this.questionText = ko.observable();
-		this.score = ko.observable();
+        var self = this;
+
+		self.questionText = ko.observable();
+		self.score = ko.observable();
 		
 		//hydrate from dto
-		ko.mapping.fromJS(roundDto, {}, this);
+		ko.mapping.fromJS(roundDto, {}, self);
 
-		this.answers = ko.observableArray(answers);
+		self.answers = ko.observableArray(answers);
 	};
 
 	var viewModel = function() {
-
 		var self = this;
 
 		//hub
-		this.hub = $.connection.gamesHub;
+		self.hub = $.connection.gamesHub;
 
-		this.hub.reportError = function(error) {
+		self.hub.reportError = function(error) {
 			$("#error").text(error);
 			$("#error").fadeIn(1000, function() {
 				$("#error").fadeOut(3000);
 			});
 		};
 
-		this.init = function() {
-			this.hub.sendGetRounds();
+		self.init = function() {
+			self.hub.sendGetRounds();
 		};
 
-		this.hub.gotRounds = function(allRounds) {
+		self.hub.gotRounds = function(allRounds) {
 			var mappedRounds = $.map(allRounds, function(dtoRound) {
 				var answers = $.map(dtoRound.answers, function(dtoAnswer) {
 					return new answerViewModel(dtoAnswer);
@@ -77,13 +79,13 @@ $(function () {
 		};
 
 		//properties
-		this.familyOneScore = ko.observable(0);
-		this.familyTwoScore = ko.observable(0);
-		this.familyOneName = ko.observable('Family One');
-		this.familyTwoName = ko.observable('Family Two');
-		this.currentRoundIndex = ko.observable(0);
-		this.isHost = ko.observable(false);
-		this.rounds = ko.observableArray([
+		self.familyOneScore = ko.observable(0);
+		self.familyTwoScore = ko.observable(0);
+		self.familyOneName = ko.observable('Family One');
+		self.familyTwoName = ko.observable('Family Two');
+		self.currentRoundIndex = ko.observable(0);
+		self.isHost = ko.observable(false);
+		self.rounds = ko.observableArray([
 			//TODO: Figure out how to get rid of this fake round for binding
 				new roundViewModel({questionText:'', score:''}, [
 					new answerViewModel({isAvailable:false, answerNumber:0, text:'', points:0}),
@@ -97,27 +99,27 @@ $(function () {
 				])]);
 
 		//subscriptions
-		this.familyOneName.subscribe(function(value) {
+		self.familyOneName.subscribe(function(value) {
 			if (self.isAudience()) return;
 			self.hub.sendFamilyOneName(value);
 		});
 
-		this.hub.gotFamilyOneName = function(value) {
+		self.hub.gotFamilyOneName = function(value) {
 			if (self.isHost()) return;
 			self.familyOneName(value);
 		};
 
-		this.familyTwoName.subscribe(function(value) {
+		self.familyTwoName.subscribe(function(value) {
 			if (self.isAudience()) return;
 			self.hub.sendFamilyTwoName(value);
 		});
 
-		this.hub.gotFamilyTwoName = function(value) {
+		self.hub.gotFamilyTwoName = function(value) {
 			if (self.isHost()) return;
 			self.familyTwoName(value);
 		};
 
-		this.isHost.subscribe(function(value) {
+		self.isHost.subscribe(function(value) {
 			self.hub.sendIsHost({ isHost: value })
 				.done(function() {
 					console.log('Sent host');
@@ -127,7 +129,7 @@ $(function () {
 		});
 
 		//clicks
-		this.answerClick = function(answer, e) {
+		self.answerClick = function(answer, e) {
 			if (self.isAudience()) return;
 
 			var dtoAnswer = ko.mapping.toJS(answer);
@@ -139,7 +141,7 @@ $(function () {
 			;
 		};
 
-		this.hub.gotShowAnswer = function(dtoAnswer) {
+		self.hub.gotShowAnswer = function(dtoAnswer) {
 			//find the answer in this model
 			var selectedAnswer = ko.utils.arrayFilter(self.currentAnswers(), function(answer) {
 				return answer.answerNumber() == dtoAnswer.answerNumber;
@@ -161,93 +163,93 @@ $(function () {
 
 		};
 
-		this.giveScoreFamilyOne = function() {
+		self.giveScoreFamilyOne = function() {
 			self.hub.sendGiveScoreFamilyOne();
 		};
 
-		this.hub.gotGiveScoreFamilyOne = function() {
+		self.hub.gotGiveScoreFamilyOne = function() {
 			self.familyOneScore(self.familyOneScore() + self.score());
 		};
 
-		this.giveScoreFamilyTwo = function() {
+		self.giveScoreFamilyTwo = function() {
 			self.hub.sendGiveScoreFamilyTwo();
 		};
 
-		this.hub.gotGiveScoreFamilyTwo = function() {
+		self.hub.gotGiveScoreFamilyTwo = function() {
 			self.familyTwoScore(self.familyTwoScore() + self.score());
 		};
 
-		this.removeScoreFamilyOne = function() {
+		self.removeScoreFamilyOne = function() {
 			self.hub.sendRemoveScoreFamilyOne();
 		};
 
-		this.hub.gotRemoveScoreFamilyOne = function() {
+		self.hub.gotRemoveScoreFamilyOne = function() {
 			self.familyOneScore(self.familyOneScore() - self.score());
 		};
 
-		this.removeScoreFamilyTwo = function() {
+		self.removeScoreFamilyTwo = function() {
 			self.hub.sendRemoveScoreFamilyTwo();
 		};
 
-		this.hub.gotRemoveScoreFamilyTwo = function() {
+		self.hub.gotRemoveScoreFamilyTwo = function() {
 			self.familyTwoScore(self.familyTwoScore() - self.score());
 		};
 
-		this.setHostClick = function() {
+		self.setHostClick = function() {
 			self.isHost(true);
 		};
 
-		this.clearFamilyOneName = function() {
+		self.clearFamilyOneName = function() {
 			self.familyOneName('');
 		};
 
-		this.clearFamilyTwoName = function() {
+		self.clearFamilyTwoName = function() {
 			self.familyTwoName('');
 		};
 
-		this.buzzFamilyOne = function() {
+		self.buzzFamilyOne = function() {
 			self.hub.sendBuzzFamilyOne();
 		};
 
-		this.hub.gotBuzzFamilyOne = function() {
+		self.hub.gotBuzzFamilyOne = function() {
 			if (self.isAudience())
 				playEffect("buzzerSound");
 
 			$('#family1WrongAnswers').find('li:hidden:first').show();
 		};
 
-		this.removeFamilyOneWrongAnswer = function() {
+		self.removeFamilyOneWrongAnswer = function() {
 			self.hub.sendRemoveFamilyOneWrongAnswer();
 		};
 
-		this.hub.gotRemoveFamilyOneWrongAnswer = function() {
+		self.hub.gotRemoveFamilyOneWrongAnswer = function() {
 			$('#family1WrongAnswers').find('li:visible:last').hide();
 		};
 
-		this.buzzFamilyTwo = function() {
+		self.buzzFamilyTwo = function() {
 			self.hub.sendBuzzFamilyTwo();
 		};
 
-		this.hub.gotBuzzFamilyTwo = function() {
+		self.hub.gotBuzzFamilyTwo = function() {
 			if (self.isAudience())
 				playEffect("buzzerSound");
 
 			$('#family2WrongAnswers').find('li:hidden:first').show();
 		};
 
-		this.removeFamilyTwoWrongAnswer = function() {
+		self.removeFamilyTwoWrongAnswer = function() {
 			self.hub.sendRemoveFamilyTwoWrongAnswer();
 		};
 
-		this.hub.gotRemoveFamilyTwoWrongAnswer = function() {
+		self.hub.gotRemoveFamilyTwoWrongAnswer = function() {
 			$('#family2WrongAnswers').find('li:visible:last').hide();
 		};
 
-		this.nextRound = function() {
+		self.nextRound = function() {
 			self.hub.sendNextRound();
 		};
 
-		this.hub.gotNextRound = function() {
+		self.hub.gotNextRound = function() {
 			self.currentRoundIndex(self.currentRoundIndex() + 1);
 
 			//HACK - Move buzzers to round model
@@ -255,23 +257,23 @@ $(function () {
 			$('#family2WrongAnswers').find('li:visible').hide();
 		};
 
-		this.lastRound = function() {
+		self.lastRound = function() {
 			self.hub.sendLastRound();
 		};
 
-		this.hub.gotLastRound = function() {
+		self.hub.gotLastRound = function() {
 			self.currentRoundIndex(self.currentRoundIndex() - 1);
 		};
 
 		//methods
-		this.showAnswerNumber = function(isAvailable) {
+		self.showAnswerNumber = function(isAvailable) {
 			if (self.isHost()) {
 				return false;
 			}
 			return isAvailable();
 		};
 
-		this.showAnswerText = function(showAnswer) {
+		self.showAnswerText = function(showAnswer) {
 			if (self.isHost()) {
 				return true;
 			}
@@ -279,51 +281,50 @@ $(function () {
 		};
 
 		//computed
-		this.isAudience = ko.computed(function() {
-			return !this.isHost();
-		}, this);
-
-		this.currentRound = ko.computed(function() {
-			return this.rounds()[this.currentRoundIndex()];
-		}, this);
-
-		this.currentAnswers = ko.computed(function() {
-			return this.currentRound().answers();
-		}, this);
-
-		this.score = ko.computed({
-			read: function() {
-				return this.currentRound().score();
-			},
-			write: function(value) {
-				this.currentRound().score(value);
-			},
-			owner: this
+		self.isAudience = ko.computed(function() {
+			return !self.isHost();
 		});
 
-		this.firstFourAnswers = ko.computed(function() {
-			var answers = [this.currentAnswers()[0],
-				this.currentAnswers()[1],
-				this.currentAnswers()[2],
-				this.currentAnswers()[3]];
+		self.currentRound = ko.computed(function() {
+			return self.rounds()[self.currentRoundIndex()];
+		});
+
+		self.currentAnswers = ko.computed(function() {
+			return self.currentRound().answers();
+		});
+
+		self.score = ko.computed({
+			read: function() {
+				return self.currentRound().score();
+			},
+			write: function(value) {
+				self.currentRound().score(value);
+			}
+		});
+
+		self.firstFourAnswers = ko.computed(function() {
+			var answers = [self.currentAnswers()[0],
+				self.currentAnswers()[1],
+				self.currentAnswers()[2],
+				self.currentAnswers()[3]];
 
 			return answers;
 
-		}, this);
+		});
 
-		this.lastFourAnswers = ko.computed(function() {
-			var answers = [this.currentAnswers()[4],
-				this.currentAnswers()[5],
-				this.currentAnswers()[6],
-				this.currentAnswers()[7]];
+		self.lastFourAnswers = ko.computed(function() {
+			var answers = [self.currentAnswers()[4],
+				self.currentAnswers()[5],
+				self.currentAnswers()[6],
+				self.currentAnswers()[7]];
 
 			return answers;
 
-		}, this);
+		});
 
-		this.questionText = ko.dependentObservable(function() {
-			return this.currentRound().questionText();
-		}, this);
+		self.questionText = ko.dependentObservable(function() {
+			return self.currentRound().questionText();
+		});
 
 	};
 
