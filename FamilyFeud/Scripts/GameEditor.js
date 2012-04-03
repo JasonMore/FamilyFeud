@@ -6,13 +6,15 @@
 $(function () {
 
 	var answerViewModel = function (answerDto) {
+        var self = this;
+
 		//observable
-		this.answerNumber = ko.observable();
-		this.text = ko.observable();
-		this.points = ko.observable();
+		self.answerNumber = ko.observable();
+		self.text = ko.observable();
+		self.points = ko.observable();
 
 		//hydrate from dto
-		ko.mapping.fromJS(answerDto, {}, this);
+		ko.mapping.fromJS(answerDto, {}, self);
 	}; 
 
 	var roundViewModel = function(roundDto, answers) {
@@ -22,29 +24,28 @@ $(function () {
             answers = [];
         }
 
-		this.questionText = ko.observable();
+		self.questionText = ko.observable();
 
 		//hydrate from dto
-		ko.mapping.fromJS(roundDto, {}, this);
+		ko.mapping.fromJS(roundDto, {}, self);
 		
-		this.isVisible = ko.observable(false);
-		this.answers = ko.observableArray(answers);
+		self.isVisible = ko.observable(false);
+		self.answers = ko.observableArray(answers);
 
         //clicks
-        this.questionClicked = function() {
+        self.questionClicked = function() {
             self.isVisible(!self.isVisible());
         };
 	};
 
 	var viewModel = function() {
-
 		var self = this;
 
-		this.gameRounds = ko.observableArray();
-		this.allRounds = ko.observableArray();
+		self.gameRounds = ko.observableArray();
+		self.allRounds = ko.observableArray();
 
         //methods
-        this.createEmptyRound = function() {
+        self.createEmptyRound = function() {
             var emptyRound = new roundViewModel();
             emptyRound.answers.push(new answerViewModel());
             emptyRound.answers.push(new answerViewModel());
@@ -54,18 +55,28 @@ $(function () {
             emptyRound.answers.push(new answerViewModel());
             emptyRound.answers.push(new answerViewModel());
             emptyRound.answers.push(new answerViewModel());
+
+            emptyRound.isVisible(true);
+
             return emptyRound;
         };
 
+        var closeVisibleRounds = function() {
+            ko.utils.arrayForEach(self.gameRounds(), function(item) {
+                item.isVisible(false);
+            });
+        };
+
         //clicks
-        this.newQuestion = function() {
+        self.newQuestion = function() {
+            closeVisibleRounds();
             self.gameRounds.push(self.createEmptyRound());
         };
 
 		//mock data
         var game1 = self.createEmptyRound();
         game1.questionText("Name a Bad Job for Someone Who's Accident Prone");
-		this.gameRounds.push(game1);
+		self.gameRounds.push(game1);
 //		this.gameRounds.push(new roundViewModel({questionText: "Name a Garment You'd Probably Find in the Dressing Room"},null));
 //		this.gameRounds.push(new roundViewModel({questionText: "Name an Article of Clothing You Can't Wash in the washing machine"},null));
 
