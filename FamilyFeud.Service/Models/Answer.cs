@@ -7,7 +7,7 @@ namespace FamilyFeud.Service.Models
 {
     public class Answer
     {
-		public int id { get; set; }
+		public int ID { get; set; }
         public int answerNumber { get; set; }
         public string text { get; set; }
         public int points { get; set; }

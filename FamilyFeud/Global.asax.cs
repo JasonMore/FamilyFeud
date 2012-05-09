@@ -20,12 +20,13 @@ namespace FamilyFeud
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
-			routes.MapRoute(
-				"DefaultApi",
-				"api/{controller}/{id}",
-				new { id = UrlParameter.Optional }
-			);
+			
+			// how do we make this work?
+			//routes.MapRoute(
+			//    "DefaultApi",
+			//    "api/{controller}/{id}",
+			//    new { id = UrlParameter.Optional }
+			//);
 
             routes.MapRoute(
                 "Default", // Route name

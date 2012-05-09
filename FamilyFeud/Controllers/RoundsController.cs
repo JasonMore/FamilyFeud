@@ -18,8 +18,7 @@ namespace FamilyFeud.Controllers
 
         public ActionResult Get()
         {
-        	return Json(_roundService.GetAll());
+        	return Json(_roundService.GetAll(), JsonRequestBehavior.AllowGet);
         }
-
     }
 }

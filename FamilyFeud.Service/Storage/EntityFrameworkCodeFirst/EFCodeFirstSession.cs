@@ -20,7 +20,6 @@ namespace FamilyFeud.Service.Storage.EntityFrameworkCodeFirst
             _context = context;
         }
 
-
         public void CommitChanges()
         {
             _context.SaveChanges();
@@ -61,7 +60,7 @@ namespace FamilyFeud.Service.Storage.EntityFrameworkCodeFirst
 
         public IQueryable<T> All<T>() where T : class, new()
         {
-            return _context.Set<T>();
+            return _context.Set<T>().Include("answers");
         }
 
         public void Add<T>(T item) where T : class, new()

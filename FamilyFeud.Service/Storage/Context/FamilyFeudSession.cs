@@ -14,7 +14,6 @@ namespace FamilyFeud.Service.Storage.Context
 		public FamilyFeudSession()
 			: base(new FamilyFeudContext())
 		{
-
 		}
 	}
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using FamilyFeud.Service.Models;
 using FamilyFeud.Service.Storage.Context;
+using System.Data.Entity;
 
 namespace FamilyFeud.Service.Services
 {
@@ -22,7 +23,7 @@ namespace FamilyFeud.Service.Services
 
 		public IEnumerable<Round> GetAll()
 		{
-			return _session.All<Round>();
+			return _session.All<Round>().Include(x => x.answers);
 		}
 	}
 }

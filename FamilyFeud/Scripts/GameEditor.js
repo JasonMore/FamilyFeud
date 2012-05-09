@@ -73,22 +73,20 @@ $(function () {
             self.gameRounds.push(self.createEmptyRound());
         };
 
-		//mock data
-        var game1 = self.createEmptyRound();
-        game1.questionText("Name a Bad Job for Someone Who's Accident Prone");
-		self.gameRounds.push(game1);
-//		this.gameRounds.push(new roundViewModel({questionText: "Name a Garment You'd Probably Find in the Dressing Room"},null));
-//		this.gameRounds.push(new roundViewModel({questionText: "Name an Article of Clothing You Can't Wash in the washing machine"},null));
-
 		self.data = { };
 
 		self.init = function() {
 			// load data
 			$.ajax({
-				url: '',
+				url: '/rounds/get',
+//				url:'/api.svc/Rounds',
 				success: function (data) {
 					ko.mapping.fromJS(data, self.data);
 				}
+//				beforeSend: function (XMLHttpRequest) {
+//                    //Specifying this header ensures that the results will be returned as JSON.
+//                    XMLHttpRequest.setRequestHeader("Accept", "application/json");
+//                }
 			});
 		};
 	};
@@ -96,4 +94,6 @@ $(function () {
 	var parentViewModel = new viewModel();
 
 	ko.applyBindings(parentViewModel);
+
+	parentViewModel.init();
 });
