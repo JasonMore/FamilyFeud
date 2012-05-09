@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+	<!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>Family Feud</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	<!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="Content/base.css">
+	<link rel="stylesheet" href="Content/skeleton.css">
+	<link rel="stylesheet" href="Content/layout.css">
+
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="Images/favicon.ico">
+	<link rel="apple-touch-icon" href="Images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="Images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="Images/apple-touch-icon-114x114.png">
+
+    <!-- Scripts
+	================================================== -->
+
+    <script src="Scripts/jquery-1.7.2.js"></script>
+	<script src="Scripts/knockout.debug.js"></script>
+	<script src="Scripts/underscore.js"></script>
+	<script src="Scripts/backbone.js"></script>
+	<script src="Scripts/knockback.js"></script>
+	<script src="Scripts/knockout.mapping-latest.js"></script>
+	<script src="Scripts/jquery.signalR.js"></script>
+	<script src="/signalr/hubs" type="text/javascript"></script>
+
+
+	@*loggly*@
+    <script type="text/javascript">
+        $(function () {
+            var key = "61cabc20-8f06-47b7-863d-7d2bd2206f71";
+            var host = "http://logs.loggly.com";
+            castor = new loggly({ url: host + '/inputs/' + key + '?rt=1', level: 'log' });
+            castor.log("url=" + window.location.href + " browser=" + castor.user_agent + " height=" + castor.browser_size.height);
+        });
+    </script>
+    <script type="text/javascript" src="http://d3eyf2cx8mbems.cloudfront.net/js/loggly-0.1.0.js"></script>
+
+</head>
+<body>
+
+
+@RenderBody()
+
+	<!-- JS
+	================================================== -->
+
+
+<!-- End Document
+================================================== -->
+
+</body>
+</html>

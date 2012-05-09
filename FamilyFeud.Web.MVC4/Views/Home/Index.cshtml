@@ -1,0 +1,101 @@
+﻿@{
+	ViewBag.Title = "Family Feud";
+}
+
+	<script src="Scripts/FamilyFeud.js"></script>
+
+<!-- Primary Page Layout
+	================================================== -->
+<!-- Delete everything in this .container and get started on your own site! -->
+<div class="container">
+	<div class="sixteen columns">
+	<div id="error" class="validation-summary-errors"></div>
+		<div class="totalScore center">
+			<h1 id="totalScore" class="score total center" data-bind="text: score">
+				</h1>
+		</div>
+	</div>
+	<div class="clear">
+	</div>
+	<div class="three columns center">
+		<input class="family" type="text" data-bind="value:familyOneName, valueUpdate: 'afterkeydown', click:clearFamilyOneName" />
+		<div>
+			<h2 id="family1Score" class="score" data-bind="text:familyOneScore"></h2>
+			<div class="resetButton" data-bind="visible: isHost">Add Score<a href="#" class="hiddenButton" data-bind="click:giveScoreFamilyOne"></a></div>
+			<div class="resetButton" data-bind="visible: isHost">Take Score<a href="#" class="hiddenButton" data-bind="click:removeScoreFamilyOne"></a></div>
+			<div class="resetButton" data-bind="visible: isHost">Buzz!<a href="#" class="hiddenButton" data-bind="click:buzzFamilyOne"></a></div>
+		</div>
+		<div>
+			<ul id="family1WrongAnswers" class="numberWrong">
+				<a href="#" class="hiddenButton" data-bind="click:removeFamilyOneWrongAnswer"></a>
+				<li style="display:none">x</li>
+				<li style="display:none">x</li>
+				<li style="display:none">x</li>
+			</ul>
+		</div>
+	</div>
+	<script type="text/html" id="answer-template">
+		<li>
+			<a class="hiddenButton" href="#" data-bind="click: $parent.answerClick"></a>
+			<div class="answerNumber" data-bind="visible: $parent.showAnswerNumber(isAvailable)">
+				<h2 data-bind="text: answerNumber"></h2>
+			</div>
+			<div class="answer" data-bind="visible: $parent.showAnswerText(showAnswer), css: { glow: showAnswer }">
+				<div class="answerText">    
+					<p data-bind="text: text"></p>
+				</div>
+				<div class="miniScore">
+					<p data-bind="text: points"></p>
+				</div>
+			</div>
+		</li>
+	</script>
+
+	<div class="five columns answers center">  
+		<ul data-bind="template: { name: 'answer-template', foreach: firstFourAnswers }"></ul>
+	</div>
+	<div class="five columns answers center">
+		<ul data-bind="template: { name: 'answer-template', foreach: lastFourAnswers }"></ul>
+	</div>
+
+	<div class="three columns center">
+		<input class="family" type="text" data-bind="value:familyTwoName, valueUpdate: 'afterkeydown', click:clearFamilyTwoName" />
+		<div>
+			<h2 id="family2Score" class="score" data-bind="text:familyTwoScore"></h2>
+			<div class="resetButton" data-bind="visible: isHost">Add Score<a href="#" class="hiddenButton" data-bind="click:giveScoreFamilyTwo"></a></div>
+			<div class="resetButton" data-bind="visible: isHost">Take Score<a href="#" class="hiddenButton" data-bind="click:removeScoreFamilyTwo"></a></div>
+			<div class="resetButton" data-bind="visible: isHost">Buzz!<a href="#" class="hiddenButton" data-bind="click:buzzFamilyTwo"></a></div>
+		</div>
+		<div>
+			<ul id="family2WrongAnswers" class="numberWrong">
+				<a href="#" class="hiddenButton" data-bind="click:removeFamilyTwoWrongAnswer"></a>
+				<li style="display:none">x</li>
+				<li style="display:none">x</li>
+				<li style="display:none">x</li>
+			</ul>
+		</div>
+	</div>
+	<div class="sixteen columns center">
+	<h3 data-bind="text:questionText"></h3>
+	</div>
+	<div class="sixteen columns"><br /></div>
+	<div class="sixteen columns"><br /></div>
+	<div class="sixteen columns"><br /></div>
+	<div class="sixteen columns"><br /></div>
+	<div class="sixteen columns">
+	<div class="resetButton" data-bind="click:setHostClick">Become Host<a href="#" class="hiddenButton"></a></div>
+	<div class="resetButton" data-bind="visible: isHost">Reset<a href="#" id="resetButton" class="hiddenButton"></a></div>
+	<div class="resetButton" data-bind="visible: isHost">Last Round<a href="#" class="hiddenButton" data-bind="click:lastRound"></a></div>
+	<div class="resetButton" data-bind="visible: isHost">Next Round<a href="#" class="hiddenButton" data-bind="click:nextRound"></a></div>
+	<div class="resetButton" data-bind="visible: isHost, text:currentRoundIndex"><a href="#" id="nextRoundButton" class="hiddenButton"></a></div>
+	</div>
+</div>
+
+
+
+<div id="junk" style="display: none">
+  <audio id="bellSound" src="http://dl.dropbox.com/u/22788/FamilyFeud-Bell.mp3" autobuffer="autobuffer" controls="" ></audio>
+  <audio id="buzzerSound" src="http://dl.dropbox.com/u/22788/FamilyFeud-Buzzer3.mp3" autobuffer="autobuffer" controls="" ></audio>
+</div>
+
+<!-- container -->
