@@ -80,6 +80,17 @@ $(function () {
 //		this.gameRounds.push(new roundViewModel({questionText: "Name a Garment You'd Probably Find in the Dressing Room"},null));
 //		this.gameRounds.push(new roundViewModel({questionText: "Name an Article of Clothing You Can't Wash in the washing machine"},null));
 
+		self.data = { };
+
+		self.init = function() {
+			// load data
+			$.ajax({
+				url: '',
+				success: function (data) {
+					ko.mapping.fromJS(data, self.data);
+				}
+			});
+		};
 	};
 
 	var parentViewModel = new viewModel();

@@ -10,6 +10,6 @@ namespace FamilyFeud.Service.Storage.Context
 	public class FamilyFeudContext : DbContext
 	{
 		public DbSet<Answer> Answers { get; set; }
-		public DbSet<Round> Games { get; set; }
+		public DbSet<Round> Rounds { get; set; }
 	}
 }

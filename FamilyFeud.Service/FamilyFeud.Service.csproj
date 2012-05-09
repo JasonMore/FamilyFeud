@@ -69,6 +69,7 @@
     <Compile Include="Models\Round.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GameService.cs" />
+    <Compile Include="Services\RoundService.cs" />
     <Compile Include="Storage\CloningCache.cs" />
     <Compile Include="Storage\Context\FamilyFeudContext.cs" />
     <Compile Include="Storage\Context\FamilyFeudInitializer.cs" />
