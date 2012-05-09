@@ -2,8 +2,51 @@
 /// <reference path="knockout-1.3.0beta.debug.js"/>
 /// <reference path="knockout.mapping-latest.debug.js"/>
 /// <reference path="jquery.validate-vsdoc.js"/>
+/// <reference path="backbone.js"/>
+/// <reference path="knockback.js"/>
 
 $(function () {
+
+	// backbone models
+
+	var Answer = Backbone.Model.extend({
+		defaults: {
+			"ID" : 0,
+			"answerNumber" : 0,
+			"text": "",
+			"points": "",
+			"isAvailable": false
+		}
+	});
+	
+
+	var AnswerCollection = Backbone.Collection.extend({
+		model: Answer,
+		url: '/api/answers'
+	});
+
+	var Round = Backbone.Model.extend({
+	    
+//		url: function () {
+//			return '/rounds/get';
+//		},
+
+		defaults: {
+			"ID" : 0,
+			"questionText" : "",
+			"answers" : new AnswerCollection(),
+			"score" : 0
+		}
+	});
+
+	var RoundCollection = Backbone.Collection.extend({
+		model: Round,
+		url: '/api/rounds'
+	});
+
+	// viewmodels
+
+
 
 	var answerViewModel = function (answerDto) {
         var self = this;
@@ -79,14 +122,9 @@ $(function () {
 			// load data
 			$.ajax({
 				url: '/rounds/get',
-//				url:'/api.svc/Rounds',
 				success: function (data) {
 					ko.mapping.fromJS(data, self.data);
 				}
-//				beforeSend: function (XMLHttpRequest) {
-//                    //Specifying this header ensures that the results will be returned as JSON.
-//                    XMLHttpRequest.setRequestHeader("Accept", "application/json");
-//                }
 			});
 		};
 	};
@@ -95,5 +133,7 @@ $(function () {
 
 	ko.applyBindings(parentViewModel);
 
+	var rounds = new RoundCollection();
+	rounds.fetch();
 	parentViewModel.init();
 });

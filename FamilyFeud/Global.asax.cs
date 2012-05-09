@@ -28,6 +28,11 @@ namespace FamilyFeud
 			//    new { id = UrlParameter.Optional }
 			//);
 
+			routes.MapRoute(
+				"Api default route",
+				"api/v1/{controller}",
+				new { action = "default" });
+
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
