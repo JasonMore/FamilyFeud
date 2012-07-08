@@ -7,6 +7,7 @@ namespace FamilyFeud.Service.Models
 {
 	public class Game
 	{
-		ICollection<Round> rounds { get; set; }
+		public int ID { get; set; }
+		public string GameJson { get; set; }
 	}
 }

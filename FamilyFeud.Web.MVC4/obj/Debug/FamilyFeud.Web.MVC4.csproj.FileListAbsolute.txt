@@ -86,3 +86,7 @@ C:\Users\Jason\Dropbox\Coding\Family Feud\FamilyFeud.Web.MVC4\bin\System.Web.Htt
 C:\Users\Jason\Dropbox\Coding\Family Feud\FamilyFeud.Web.MVC4\bin\System.Web.Http.WebHost.xml
 C:\Users\Jason\Dropbox\Coding\Family Feud\FamilyFeud.Web.MVC4\bin\System.Net.Http.Formatting.xml
 C:\Users\Jason\Dropbox\Coding\Family Feud\FamilyFeud.Web.MVC4\obj\Debug\FamilyFeud.Web.MVC4.csprojResolveAssemblyReference.cache
+C:\Users\Jason\Dropbox\Coding\Family Feud\FamilyFeud.Web.MVC4\bin\AutoMapper.dll
+C:\Users\Jason\Dropbox\Coding\Family Feud\FamilyFeud.Web.MVC4\bin\AutoMapperAssist.dll
+C:\Users\Jason\Dropbox\Coding\Family Feud\FamilyFeud.Web.MVC4\bin\AutoMapper.xml
+C:\Users\Jason\Dropbox\Coding\Family Feud\FamilyFeud.Web.MVC4\bin\Telerik.Web.Mvc.dll

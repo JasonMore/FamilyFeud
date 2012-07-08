@@ -13,7 +13,7 @@ namespace FamilyFeud.Service.Migrations
 	{
 		public Configuration()
 		{
-			AutomaticMigrationsEnabled = true;
+			AutomaticMigrationsEnabled = false;
 		}
 
 		protected override void Seed(FamilyFeudContext context)
@@ -31,45 +31,45 @@ namespace FamilyFeud.Service.Migrations
 			//    );
 			//
 
-			var answer1 = new Answer { answerNumber = 1, text = "C#", points = 23, isAvailable = true };
-			var answer2 = new Answer { answerNumber = 2, text = "Cobra", points = 10, isAvailable = true };
-			var answer3 = new Answer { answerNumber = 3, text = "ColdFusion", points = 7, isAvailable = true };
-			var answer4 = new Answer { answerNumber = 4, text = "Python", points = 7, isAvailable = true };
-			var answer5 = new Answer { answerNumber = 5, text = "Ruby", points = 6, isAvailable = true };
-			var answer6 = new Answer { answerNumber = 6, text = "Javascript", points = 5, isAvailable = true };
-			var answer7 = new Answer { answerNumber = 7, text = "Fortran", points = 3, isAvailable = true };
-			var answer8 = new Answer { answerNumber = 8, text = "Java", points = 3, isAvailable = true };
+			//var answer1 = new Answer { answerNumber = 1, text = "C#", points = 23, isAvailable = true };
+			//var answer2 = new Answer { answerNumber = 2, text = "Cobra", points = 10, isAvailable = true };
+			//var answer3 = new Answer { answerNumber = 3, text = "ColdFusion", points = 7, isAvailable = true };
+			//var answer4 = new Answer { answerNumber = 4, text = "Python", points = 7, isAvailable = true };
+			//var answer5 = new Answer { answerNumber = 5, text = "Ruby", points = 6, isAvailable = true };
+			//var answer6 = new Answer { answerNumber = 6, text = "Javascript", points = 5, isAvailable = true };
+			//var answer7 = new Answer { answerNumber = 7, text = "Fortran", points = 3, isAvailable = true };
+			//var answer8 = new Answer { answerNumber = 8, text = "Java", points = 3, isAvailable = true };
 
-			context.Answers.AddOrUpdate(
-				x => new { x.text, x.points },
-				answer1,
-				answer2,
-				answer3,
-				answer4,
-				answer5,
-				answer6,
-				answer7,
-				answer8
-				);
+			//context.Answers.AddOrUpdate(
+			//	x => new { x.text, x.points },
+			//	answer1,
+			//	answer2,
+			//	answer3,
+			//	answer4,
+			//	answer5,
+			//	answer6,
+			//	answer7,
+			//	answer8
+			//	);
 
-			context.Rounds.AddOrUpdate(
-				x => new { x.questionText },
-				new Round
-				{
-					questionText = "Name the most productive programming language",
-					answers = new List<Answer>
-						{
-							answer1,
-							answer2,
-							answer3,
-							answer4,
-							answer5,
-							answer6,
-							answer7,
-							answer8
-						}
-				}
-			);
+			//context.Rounds.AddOrUpdate(
+			//	x => new { x.questionText },
+			//	new Round
+			//	{
+			//		questionText = "Name the most productive programming language",
+			//		answers = new List<Answer>
+			//			{
+			//				answer1,
+			//				answer2,
+			//				answer3,
+			//				answer4,
+			//				answer5,
+			//				answer6,
+			//				answer7,
+			//				answer8
+			//			}
+			//	}
+			//);
 
 		}
 	}

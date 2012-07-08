@@ -44,17 +44,6 @@
 	<script src="/signalr/hubs" type="text/javascript"></script>
 
 
-	@*loggly*@
-    <script type="text/javascript">
-        $(function () {
-            var key = "61cabc20-8f06-47b7-863d-7d2bd2206f71";
-            var host = "http://logs.loggly.com";
-            castor = new loggly({ url: host + '/inputs/' + key + '?rt=1', level: 'log' });
-            castor.log("url=" + window.location.href + " browser=" + castor.user_agent + " height=" + castor.browser_size.height);
-        });
-    </script>
-    <script type="text/javascript" src="http://d3eyf2cx8mbems.cloudfront.net/js/loggly-0.1.0.js"></script>
-
 </head>
 <body>
 

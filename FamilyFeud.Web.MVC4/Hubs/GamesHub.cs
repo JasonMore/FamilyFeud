@@ -27,20 +27,20 @@ namespace FamilyFeud.Hubs
             this.AddToGroup(AUDIENCE);
         }
 
-        public bool SendGetRounds()
-        {
-            try
-            {
-                var rounds = _gameService.GetRounds();
-                Caller.gotRounds(rounds);
-                return true;
-            }
-            catch (Exception)
-            {
-                Caller.reportError("Unable to get rounds;");
-                return false;
-            }
-        }
+		//public bool SendGetRounds()
+		//{
+		//	try
+		//	{
+		//		var rounds = _gameService.GetRounds();
+		//		Caller.gotRounds(rounds);
+		//		return true;
+		//	}
+		//	catch (Exception)
+		//	{
+		//		Caller.reportError("Unable to get rounds;");
+		//		return false;
+		//	}
+		//}
 
         public bool SendShowAnswer(Answer answer)
         {

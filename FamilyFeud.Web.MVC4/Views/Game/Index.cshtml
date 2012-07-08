@@ -2,7 +2,10 @@
     ViewBag.Title = "Index";
 }
 
-<script src="Scripts/GameEditor.js"></script>
+@*<script src="Scripts/GameEditor.js"></script>*@
+
+<link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2012.2.607/telerik.common.min.css" rel="stylesheet"/>
+<link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2012.2.607/telerik.vista.min.css" rel="stylesheet"/>
 
 <script type="text/html" id="roundItem-template">
 <li>
@@ -51,16 +54,35 @@
 <div class="container white">
     
     @*make game*@
-	<div class="eight columns">
+	@*<div class="eight columns">
 		<ul data-bind="template: { name: 'roundItem-template', foreach: gameRounds.rounds }"></ul>
-	</div>
+	</div>*@
 
 	@*all questions*@
-	<div class="eight columns">
+	@*<div class="eight columns">
         <label>
             Search: 
             <input type="text" data-bind="value:questionFilter" />
         </label>
 		<ul data-bind="template: { name: 'roundItem-template', foreach: allRounds.rounds }"></ul>
-	</div>
+	</div>*@
+
+    @(Html.Telerik().Grid<FamilyFeud.Service.Models.Question>()
+        .Name("Grid")
+        .Columns(columns =>
+        {
+
+            columns.Bound(o => o.QuestionText).Width(200);
+
+        })
+        .DataBinding(dataBinding => dataBinding.Ajax().Select("GetAllQuestions", "Game"))
+        .Pageable()
+        .Sortable()
+        .Scrollable()
+        .Groupable()
+        .Filterable()
+) 
+
+
 </div>
+

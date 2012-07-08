@@ -63,19 +63,20 @@ $(function () {
 			});
 		};
 
-		self.init = function() {
-			self.hub.sendGetRounds();
+	    // mapping
+		self.init = function () {
+		    self.mapRounds(window.roundsData);
 		};
 
-		self.hub.gotRounds = function(allRounds) {
-			var mappedRounds = $.map(allRounds, function(dtoRound) {
-				var answers = $.map(dtoRound.answers, function(dtoAnswer) {
-					return new answerViewModel(dtoAnswer);
-				});
-				return new roundViewModel(dtoRound, answers);
-			});
+		self.mapRounds = function (allRounds) {
+		    var mappedRounds = $.map(allRounds, function (dtoRound) {
+		        var answers = $.map(dtoRound.answers, function (dtoAnswer) {
+		            return new answerViewModel(dtoAnswer);
+		        });
+		        return new roundViewModel(dtoRound, answers);
+		    });
 
-			self.rounds(mappedRounds);
+		    self.rounds(mappedRounds);
 		};
 
 		//properties
@@ -329,10 +330,10 @@ $(function () {
 	};
 
 	var parentViewModel = new viewModel();
+	parentViewModel.init();
 
 	ko.applyBindings(parentViewModel);
 	$.connection.hub.start(function () { 
-		parentViewModel.init(); 
 		parentViewModel.hub.startConnection();
 		self.notify = true;
 	});
