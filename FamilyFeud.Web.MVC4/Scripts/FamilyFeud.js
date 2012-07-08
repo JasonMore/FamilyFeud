@@ -42,7 +42,7 @@ $(function () {
         var self = this;
 
 		self.questionText = ko.observable();
-		self.score = ko.observable();
+		self.score = ko.observable(0);
 		
 		//hydrate from dto
 		ko.mapping.fromJS(roundDto, {}, self);
@@ -131,7 +131,8 @@ $(function () {
 
 		//clicks
 		self.answerClick = function(answer, e) {
-			if (self.isAudience()) return;
+            // hack for code talk
+		    //if (self.isAudience()) return;
 
 			var dtoAnswer = ko.mapping.toJS(answer);
 			self.hub.sendShowAnswer(dtoAnswer).done(function() {

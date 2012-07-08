@@ -42,7 +42,7 @@ namespace FamilyFeud.Hubs
 		//	}
 		//}
 
-        public bool SendShowAnswer(Answer answer)
+        public bool SendShowAnswer(AnswerViewModel answer)
         {
             try
             {

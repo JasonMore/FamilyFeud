@@ -18,7 +18,7 @@ namespace FamilyFeud.Controllers
 
         public ActionResult Index()
         {
-			ViewBag.RoundsJsonData = _gameService.GetGame(1);
+			//ViewBag.RoundsJsonData = _gameService.GetGame(1);
             return View();
         }
     }
