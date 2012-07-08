@@ -23,7 +23,7 @@ namespace FamilyFeud.Service.Services
 
 		public IEnumerable<Round> GetAll()
 		{
-			return _session.All<Round>().Include(x => x.answers);
+			return _session.All<Round>().Include(x=>x.answers);
 		}
 	}
 }

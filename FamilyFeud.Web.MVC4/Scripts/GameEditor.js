@@ -4,136 +4,112 @@
 /// <reference path="jquery.validate-vsdoc.js"/>
 /// <reference path="backbone.js"/>
 /// <reference path="knockback.js"/>
-
+var parentViewModel = null;
 $(function () {
 
-	// backbone models
-
-	var Answer = Backbone.Model.extend({
-		defaults: {
-			"ID" : 0,
-			"answerNumber" : 0,
-			"text": "",
-			"points": "",
-			"isAvailable": false
-		}
-	});
-	
-
-	var AnswerCollection = Backbone.Collection.extend({
-		model: Answer,
-		url: '/api/answers'
-	});
-
-	var Round = Backbone.Model.extend({
-	    
-//		url: function () {
-//			return '/rounds/get';
-//		},
-
-		defaults: {
-			"ID" : 0,
-			"questionText" : "",
-			"answers" : new AnswerCollection(),
-			"score" : 0
-		}
-	});
-
-	var RoundCollection = Backbone.Collection.extend({
-		model: Round,
-		url: '/api/rounds'
-	});
+	var cloneObservable = function (observableObject) {
+		return ko.mapping.fromJS(ko.toJS(observableObject));
+	}
 
 	// viewmodels
-
-
-
+	
 	var answerViewModel = function (answerDto) {
         var self = this;
 
-		//observable
-		self.answerNumber = ko.observable();
-		self.text = ko.observable();
-		self.points = ko.observable();
+		// observable
+		self.answerNumber = ko.observable(0);
+		self.text = ko.observable('');
+		self.points = ko.observable(0);
 
-		//hydrate from dto
+		// hydrate from dto
 		ko.mapping.fromJS(answerDto, {}, self);
 	}; 
 
-	var roundViewModel = function(roundDto, answers) {
+	var roundViewModel = function(roundDto) {
         var self = this;
 
-        if (!answers) {
-            answers = [];
-        }
-
+		// observables
 		self.questionText = ko.observable();
+		self.isVisible = ko.observable(false);
+		self.answers = ko.observableArray();
 
-		//hydrate from dto
+		// hydrate from dto
 		ko.mapping.fromJS(roundDto, {}, self);
 		
-		self.isVisible = ko.observable(false);
-		self.answers = ko.observableArray(answers);
+		if (roundDto.answers) {
+            var answerViewModels = $.map(roundDto.answers, function(answerDto) {
+					return new answerViewModel(answerDto);
+			});
 
-        //clicks
+			self.answers(answerViewModels);
+        }
+
+        // clicks
         self.questionClicked = function() {
             self.isVisible(!self.isVisible());
         };
+
+        self.clone = function () {
+            return new roundViewModel(ko.toJS(self));
+        };
+	};
+
+	var roundsViewModel = function(isGameEditor) {
+		var self = this;
+
+		// observables
+		self.rounds = ko.observableArray();
+		self.isGameEditor = ko.observable(isGameEditor);
+
+		// computed
+		self.showGameEditControls = ko.computed(function() {
+		    return self.isGameEditor();
+		});
+
+		self.showListControls = ko.computed(function() {
+			return !self.isGameEditor();
+		});
 	};
 
 	var viewModel = function() {
 		var self = this;
 
-		self.gameRounds = ko.observableArray();
-		self.allRounds = ko.observableArray();
+//		self.gameRounds = ko.observableArray();
+//		self.allRounds = ko.observableArray();
 
-        //methods
-        self.createEmptyRound = function() {
-            var emptyRound = new roundViewModel();
-            emptyRound.answers.push(new answerViewModel());
-            emptyRound.answers.push(new answerViewModel());
-            emptyRound.answers.push(new answerViewModel());
-            emptyRound.answers.push(new answerViewModel());
-            emptyRound.answers.push(new answerViewModel());
-            emptyRound.answers.push(new answerViewModel());
-            emptyRound.answers.push(new answerViewModel());
-            emptyRound.answers.push(new answerViewModel());
+		self.gameRounds = new roundsViewModel(true);
+		self.allRounds = new roundsViewModel(false);
+		self.questionFilter = ko.observable();
 
-            emptyRound.isVisible(true);
+		self.addQuestionToGame = function(roundViewModel) {
+			self.gameRounds.rounds.push(roundViewModel.clone());
+		};
 
-            return emptyRound;
-        };
+		// observables 
 
-        var closeVisibleRounds = function() {
-            ko.utils.arrayForEach(self.gameRounds(), function(item) {
-                item.isVisible(false);
-            });
-        };
 
-        //clicks
-        self.newQuestion = function() {
-            closeVisibleRounds();
-            self.gameRounds.push(self.createEmptyRound());
-        };
-
-		self.data = { };
-
+		// load data
 		self.init = function() {
-			// load data
 			$.ajax({
-				url: '/rounds/get',
-				success: function (data) {
-					ko.mapping.fromJS(data, self.data);
+				url: '/game/GetAllRounds',
+				success: function (allRounds) {
+					self.mapAllRounds(allRounds);
 				}
 			});
 		};
+
+		self.mapAllRounds = function(allRounds) {
+			var mappedRounds = $.map(allRounds, function(dtoRound) {
+				return new roundViewModel(dtoRound);
+			});
+
+			self.allRounds.rounds(mappedRounds);
+		};
 	};
 
-	var parentViewModel = new viewModel();
+	parentViewModel = new viewModel();
 
 	ko.applyBindings(parentViewModel);
 
-	var rounds = new RoundCollection();
-	rounds.fetch();
 	parentViewModel.init();
 });

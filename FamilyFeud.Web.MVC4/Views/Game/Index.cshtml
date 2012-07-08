@@ -4,43 +4,63 @@
 
 <script src="Scripts/GameEditor.js"></script>
 
-<script type="text/html" id="answer-template">
-	<div class="row">
-		<div class="one columns" data-bind="text: answerNumber"></div>
-		<div class="five columns"><input type="text" data-bind="value: text" /></div>
-		<div class="two columns"><input type="text" data-bind="value: points" /></div>
-	</div>
-</script>
-
 <script type="text/html" id="roundItem-template">
-	<li>
-		<span data-bind="text: questionText, click: questionClicked" /> <a href="#">down</a> <a href="#">up</a> <a href="#">del</a>
-		<div data-bind="visible: isVisible"> 
-			<label>
-			Question
-			<textarea data-bind="text: questionText"></textarea> 
-			</label>
-			<div class="row">
-				<div class="one columns">#</div>
-				<div class="five columns"><label>Answer</label></div>
-				<div class="two columns"><label>Points</label></div>
-			</div>
-			<div data-bind="template: { name: 'answer-template', foreach: 'answers' }"></div>
+<li>
+	<div class="row">
+		<div class="five columns">
+			<a href="#" data-bind="click: questionClicked">
+				<span data-bind="text: questionText" /> 
+			</a>
 		</div>
-	</li>
+
+		<div class="two columns">
+            @*The two divs below are not working :-(*@
+			<div data-bind="visible:$parent.showGameEditControls"> 
+				@*<a href="#">down</a> 
+				<a href="#">up</a> 
+				<a href="#">del</a>	*@
+			</div>
+			<div data-bind="visible:$parent.showListControls"> 
+				<button data-bind="click:$parent.addQuestionToGame" >add</button>
+			</div>
+                @*hack :-(*@
+				<button data-bind="click:$parent.addQuestionToGame" >add</button>
+		</div>
+	</div>
+	<div data-bind="visible: isVisible">
+		<div class="row">
+			<div class="one columns">#</div>
+			<div class="five columns"><label>Answer</label></div>
+			<div class="two columns"><label>Points</label></div>
+		</div>
+		<div data-bind="foreach: answers ">
+			<div class="row">
+				<div class="one columns" data-bind="text: answerNumber"></div>
+				<div class="five columns">
+                    <input type="text" data-bind="value: text, enable: $parent.isGameEditor" />
+				</div>
+				<div class="two columns">
+                    <input type="text" data-bind="value: points, enable: $parent.isGameEditor" />
+				</div>
+			</div>
+		</div>
+	</div>
+</li>
 </script>
 
 <div class="container white">
-	@*make game*@
+    
+    @*make game*@
 	<div class="eight columns">
-		<ul data-bind="template: { name: 'roundItem-template', foreach: gameRounds }">
-		</ul>
-        <button data-bind="click:newQuestion">New Question</button>
-        <a href='#' data-bind="click:newQuestion">New Question</a>
+		<ul data-bind="template: { name: 'roundItem-template', foreach: gameRounds.rounds }"></ul>
 	</div>
 
 	@*all questions*@
 	<div class="eight columns">
-	
+        <label>
+            Search: 
+            <input type="text" data-bind="value:questionFilter" />
+        </label>
+		<ul data-bind="template: { name: 'roundItem-template', foreach: allRounds.rounds }"></ul>
 	</div>
 </div>

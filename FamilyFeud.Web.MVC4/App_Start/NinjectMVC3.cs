@@ -4,13 +4,16 @@ using Ninject;
 using Ninject.Web.Mvc;
 using SignalR.Infrastructure;
 using Ninject.Extensions.Conventions;
+//using System.Web.Http;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(FamilyFeud.App_Start.NinjectMVC3), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(FamilyFeud.App_Start.NinjectMVC3), "Stop")]
 
 namespace FamilyFeud.App_Start
 {
-    public static class NinjectMVC3 
+	using NinjectAdapter;
+
+	public static class NinjectMVC3 
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
@@ -22,7 +25,13 @@ namespace FamilyFeud.App_Start
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestModule));
             DynamicModuleUtility.RegisterModule(typeof(HttpApplicationInitializationModule));
             bootstrapper.Initialize(CreateKernel);
+
 			DependencyResolver.SetResolver(new SignalR.Ninject.NinjectDependencyResolver(bootstrapper.Kernel));
+
+			// Set Web API Resolver
+			//GlobalConfiguration.Configuration
+			//                   .ServiceResolver
+			//                   .SetResolver(new NinjectServiceLocator(bootstrapper.Kernel));
         }
         
         /// <summary>
