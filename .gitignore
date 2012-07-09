@@ -17,3 +17,6 @@ FamilyFeud.suo
 *.suo
 FamilyFeud.suo
 FamilyFeud.suo
+FamilyFeud.Web.MVC4/bin
+FamilyFeud.Web.MVC4/bin/*
+FamilyFeud.Web.MVC4/obj/Debug/
