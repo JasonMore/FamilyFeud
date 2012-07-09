@@ -11,6 +11,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6CF68D
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "References", "References", "{5EBD9667-1340-4435-8C87-AD7E01CEEDE0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVC4", "MVC4", "{7F808A8E-2FA9-438D-9509-6C195233DC08}"
+	ProjectSection(SolutionItems) = preProject
+		References\MVC4\System.Json.xml = References\MVC4\System.Json.xml
+		References\MVC4\System.Net.Http.Formatting.dll = References\MVC4\System.Net.Http.Formatting.dll
+		References\MVC4\System.Net.Http.Formatting.xml = References\MVC4\System.Net.Http.Formatting.xml
+		References\MVC4\System.Net.Http.WebRequest.dll = References\MVC4\System.Net.Http.WebRequest.dll
+		References\MVC4\System.Net.Http.WebRequest.xml = References\MVC4\System.Net.Http.WebRequest.xml
+		References\MVC4\System.Net.Http.dll = References\MVC4\System.Net.Http.dll
+		References\MVC4\System.Net.Http.xml = References\MVC4\System.Net.Http.xml
+		References\MVC4\System.Web.Helpers.xml = References\MVC4\System.Web.Helpers.xml
+		References\MVC4\System.Web.Http.Common.xml = References\MVC4\System.Web.Http.Common.xml
+		References\MVC4\System.Web.Http.Data.EntityFramework.xml = References\MVC4\System.Web.Http.Data.EntityFramework.xml
+		References\MVC4\System.Web.Http.Data.Helpers.xml = References\MVC4\System.Web.Http.Data.Helpers.xml
+		References\MVC4\System.Web.Http.Data.xml = References\MVC4\System.Web.Http.Data.xml
+		References\MVC4\System.Web.Http.SelfHost.dll = References\MVC4\System.Web.Http.SelfHost.dll
+		References\MVC4\System.Web.Http.SelfHost.xml = References\MVC4\System.Web.Http.SelfHost.xml
+		References\MVC4\System.Web.Http.WebHost.dll = References\MVC4\System.Web.Http.WebHost.dll
+		References\MVC4\System.Web.Http.WebHost.xml = References\MVC4\System.Web.Http.WebHost.xml
+		References\MVC4\System.Web.Http.dll = References\MVC4\System.Web.Http.dll
+		References\MVC4\System.Web.Http.xml = References\MVC4\System.Web.Http.xml
+		References\MVC4\System.Web.Mvc.dll = References\MVC4\System.Web.Mvc.dll
+		References\MVC4\System.Web.Mvc.xml = References\MVC4\System.Web.Mvc.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +70,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F808A8E-2FA9-438D-9509-6C195233DC08} = {5EBD9667-1340-4435-8C87-AD7E01CEEDE0}
 	EndGlobalSection
 EndGlobal
