@@ -29,9 +29,15 @@ namespace FamilyFeud.Controllers
 		}
 
 		[GridAction]
-		public ActionResult GetAllQuestions()
+		public ActionResult _AjaxBinding()
 		{
 			return View(new GridModel(_questionService.GetAllQuestions()));
 		}
+
+        [GridAction]
+        public ActionResult _AnswersForQuestionAjax(int questionID)
+        {
+            return View(new GridModel(_questionService.GetAnswersForQuestion(questionID)));
+        }
     }
 }

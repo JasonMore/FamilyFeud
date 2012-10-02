@@ -82,6 +82,10 @@
     <Compile Include="Migrations\201207082024462_AddedGame.Designer.cs">
       <DependentUpon>201207082024462_AddedGame.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201210021350356_AddedQuestionId.cs" />
+    <Compile Include="Migrations\201210021350356_AddedQuestionId.Designer.cs">
+      <DependentUpon>201210021350356_AddedQuestionId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Game.cs" />

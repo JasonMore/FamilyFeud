@@ -16,6 +16,7 @@ namespace FamilyFeud.Service.Models
 
 		public int ID { get; set; }
 		public Question Question { get; set; }
+        public int QuestionID { get; set; }
 		
 		[StringLength(75)]
 		public string AnswerText { get; set; }

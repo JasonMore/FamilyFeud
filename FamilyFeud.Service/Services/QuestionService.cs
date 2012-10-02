@@ -14,7 +14,9 @@ namespace FamilyFeud.Service.Services
 	{
 		IEnumerable<QuestionViewModel> GetAll();
 		IQueryable<Question> GetAllQuestions();
-	}
+
+        IQueryable<Answer> GetAnswersForQuestion(int questionID);
+    }
 
 	public class QuestionService : IQuestionService
 	{
@@ -36,5 +38,11 @@ namespace FamilyFeud.Service.Services
 		{
 			return _session.All<Question>();
 		}
-	}
+
+
+        public IQueryable<Answer> GetAnswersForQuestion(int questionID)
+        {
+            return _session.All<Answer>().Where(x=>x.Question.ID == questionID);
+        }
+    }
 }
