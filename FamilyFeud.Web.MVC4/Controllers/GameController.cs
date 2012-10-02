@@ -39,5 +39,10 @@ namespace FamilyFeud.Controllers
         {
             return View(new GridModel(_questionService.GetAnswersForQuestion(questionID)));
         }
+
+        public JsonResult GetQuestion(int questionId)
+        {
+            return Json(_questionService.GetQuestion(questionId), JsonRequestBehavior.AllowGet);
+        }
     }
 }

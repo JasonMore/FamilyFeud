@@ -1,115 +1,114 @@
-﻿﻿/// <reference path="jquery-1.6.2-vsdoc.js"/>
-/// <reference path="knockout-1.3.0beta.debug.js"/>
-/// <reference path="knockout.mapping-latest.debug.js"/>
-/// <reference path="jquery.validate-vsdoc.js"/>
-/// <reference path="backbone.js"/>
-/// <reference path="knockback.js"/>
-var parentViewModel = null;
-$(function () {
+﻿// viewmodels
 
-	var cloneObservable = function (observableObject) {
-		return ko.mapping.fromJS(ko.toJS(observableObject));
-	}
+var answerViewModel = function (answerDto) {
+    var self = this;
 
-	// viewmodels
-	
-	var answerViewModel = function (answerDto) {
-        var self = this;
+    // observable
+    self.answerNumber = ko.observable(0);
+    self.text = ko.observable('');
+    self.points = ko.observable(0);
 
-		// observable
-		self.answerNumber = ko.observable(0);
-		self.text = ko.observable('');
-		self.points = ko.observable(0);
+    // hydrate from dto
+    ko.mapping.fromJS(answerDto, {}, self);
+};
 
-		// hydrate from dto
-		ko.mapping.fromJS(answerDto, {}, self);
-	}; 
+var roundViewModel = function (roundDto) {
+    var self = this;
 
-	var roundViewModel = function(roundDto) {
-        var self = this;
+    // observables
+    self.questionText = ko.observable();
+    self.isVisible = ko.observable(false);
+    self.answers = ko.observableArray();
 
-		// observables
-		self.questionText = ko.observable();
-		self.isVisible = ko.observable(false);
-		self.answers = ko.observableArray();
+    // hydrate from dto
+    ko.mapping.fromJS(roundDto, {
+        'answers': {
+            create: function (options) {
+                return new answerViewModel(options.data);
+            }
+        }
+    }, self);
 
-		// hydrate from dto
-		ko.mapping.fromJS(roundDto, {}, self);
-		
-		if (roundDto.answers) {
-            var answerViewModels = $.map(roundDto.answers, function(answerDto) {
-					return new answerViewModel(answerDto);
-			});
+    // clicks
+    self.questionClicked = function () {
+        self.isVisible(!self.isVisible());
+    };
 
-			self.answers(answerViewModels);
+    self.clone = function () {
+        return new roundViewModel(ko.toJS(self));
+    };
+};
+
+var gameViewModel = function () {
+    var self = this;
+
+    self.gameRounds = ko.observableArray();
+
+    self.addRoundToGame = function (roundDto) {
+        self.gameRounds.push(new roundViewModel(roundDto));
+    };
+
+    self.removeRound = function (questionId) {
+        if (_.isObject(questionId)) {
+            questionId = questionId.ID();
         }
 
-        // clicks
-        self.questionClicked = function() {
-            self.isVisible(!self.isVisible());
-        };
+        ui.uncheckItemInGrid(questionId);
 
-        self.clone = function () {
-            return new roundViewModel(ko.toJS(self));
-        };
-	};
+        self.gameRounds.reject_(function (round) {
+            return round.ID() == questionId;
+        });
+    };
 
-	var roundsViewModel = function(isGameEditor) {
-		var self = this;
-
-		// observables
-		self.rounds = ko.observableArray();
-		self.isGameEditor = ko.observable(isGameEditor);
-
-		// computed
-		self.showGameEditControls = ko.computed(function() {
-		    return self.isGameEditor();
-		});
-
-		self.showListControls = ko.computed(function() {
-			return !self.isGameEditor();
-		});
-	};
-
-	var viewModel = function() {
-		var self = this;
-
-//		self.gameRounds = ko.observableArray();
-//		self.allRounds = ko.observableArray();
-
-		self.gameRounds = new roundsViewModel(true);
-		self.allRounds = new roundsViewModel(false);
-		self.questionFilter = ko.observable();
-
-		self.addQuestionToGame = function(roundViewModel) {
-			self.gameRounds.rounds.push(roundViewModel.clone());
-		};
-
-		// observables 
+    // observables 
 
 
-		// load data
-		self.init = function() {
-			$.ajax({
-				url: '/game/GetAllRounds',
-				success: function (allRounds) {
-					self.mapAllRounds(allRounds);
-				}
-			});
-		};
+    // load data
+    //self.init = function () {
+    //    $.ajax({
+    //        url: '/game/GetAllRounds',
+    //        success: function (allRounds) {
+    //            self.mapAllRounds(allRounds);
+    //        }
+    //    });
+    //};
 
-		self.mapAllRounds = function(allRounds) {
-			var mappedRounds = $.map(allRounds, function(dtoRound) {
-				return new roundViewModel(dtoRound);
-			});
+    //self.mapAllRounds = function (allRounds) {
+    //    var mappedRounds = $.map(allRounds, function (dtoRound) {
+    //        return new roundViewModel(dtoRound);
+    //    });
 
-			self.allRounds.rounds(mappedRounds);
-		};
-	};
+    //    self.allRounds.rounds(mappedRounds);
+    //};
+};
 
-	parentViewModel = new viewModel();
+var ui = {
+    gridCheckBoxClicked: function () {
+        var $this = $(this);
+        if ($this.prop('checked')) {
+            $.ajax({
+                url: '/game/GetQuestion',
+                data: { questionId: $this.val() },
+                success: function (data) {
+                    masterViewModel.addRoundToGame(data);
+                }
+            });
+        } else {
+            masterViewModel.removeRound($this.val());
+        }
+    },
+    uncheckItemInGrid: function (questionId) {
+        $('input[type="checkbox"][value=' + questionId + ']').prop('checked', false);
+    }
+};
 
-	ko.applyBindings(parentViewModel);
+var masterViewModel;
 
-	parentViewModel.init();
+$(function () {
+    masterViewModel = new gameViewModel();
+    ko.applyBindings(masterViewModel);
+
+    $('input[type="checkbox"]').live('click', ui.gridCheckBoxClicked);
+
 });
+
