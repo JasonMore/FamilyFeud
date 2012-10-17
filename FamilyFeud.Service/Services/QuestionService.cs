@@ -54,7 +54,7 @@ namespace FamilyFeud.Service.Services
                 .Include(x => x.Answers)
                 .First(x => x.ID == questionId);
 
-            return new QuestionViewModel
+            var questionViewModel = new QuestionViewModel
             {
                 ID = question.ID,
                 questionText = question.QuestionText,
@@ -62,8 +62,27 @@ namespace FamilyFeud.Service.Services
                 {
                     text = x.AnswerText,
                     points = x.AnswerPointValue
-                })
+                }).ToList()
             };
+
+            var originalAnswerCount = questionViewModel.answers.Count();
+
+            //make sure there are 8 questions
+            for (int i = 0; i < 8; i++)
+            {
+                var nextAnswerNumber = i + 1;
+
+                if (originalAnswerCount >= nextAnswerNumber)
+                {
+                    questionViewModel.answers[i].answerNumber = nextAnswerNumber;
+                }
+                else
+                {
+                    questionViewModel.answers.Add(new AnswerViewModel { answerNumber = nextAnswerNumber });
+                }
+            }
+
+            return questionViewModel;
         }
     }
 }

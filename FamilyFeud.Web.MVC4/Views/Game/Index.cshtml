@@ -2,151 +2,48 @@
     ViewBag.Title = "Index";
 }
 
-<script src="Scripts/GameEditor.js"></script>
-
-<link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2012.2.607/telerik.common.min.css" rel="stylesheet" />
-
-<link type="text/css" href="http://aspnet-skins.telerikstatic.com/mvcz/2012.2.607/telerik.vista.min.css" rel="stylesheet" />
-
-<script type="text/html" id="roundItem-template">
-    <li>
-        <div class="row">
-            <div class="five columns">
-                <a href="#" data-bind="click: questionClicked">
-                    <span data-bind="text: questionText" />
-                </a>
-            </div>
-
-            <div class="two columns">
-                @*The two divs below are not working :-(*@
-                <div data-bind="visible:$parent.showGameEditControls">
-                    @*<a href="#">down</a> 
-				<a href="#">up</a> 
-				<a href="#">del</a>	*@
-                </div>
-                <div data-bind="visible:$parent.showListControls">
-                    <button data-bind="click:$parent.addQuestionToGame">add</button>
-                </div>
-                @*hack :-(*@
-                <button data-bind="click:$parent.addQuestionToGame">add</button>
-            </div>
-        </div>
-        <div data-bind="visible: isVisible">
-            <div class="row">
-                <div class="one columns">#</div>
-                <div class="five columns">
-                    <label>Answer</label>
-                </div>
-                <div class="two columns">
-                    <label>Points</label>
-                </div>
-            </div>
-            <div data-bind="foreach: answers ">
-                <div class="row">
-                    <div class="one columns" data-bind="text: answerNumber"></div>
-                    <div class="five columns">
-                        <input type="text" data-bind="value: text, enable: $parent.isGameEditor" />
-                    </div>
-                    <div class="two columns">
-                        <input type="text" data-bind="value: points, enable: $parent.isGameEditor" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </li>
-</script>
-
 <div class="container white">
+    <h2>@Html.ActionLink("Create a new game","New")</h2>
 
-    @*make game*@
-    <div class="eight columns">
-        <ul data-bind="foreach: gameRounds">
-            <li>
-                <div class="row">
-                    <div class="five columns">
-                        <a href="#" data-bind="click: questionClicked">
-                            <span data-bind="text: questionText" />
-                        </a>
-                    </div>
-
-                    <div class="two columns">
-                        <a href="#">down</a> 
-				        <a href="#">up</a> 
-				        <a href="#" data-bind="click: $parent.removeRound">del</a>	
-                    </div>
-                </div>
-                <div data-bind="visible: isVisible">
-                    <div class="row">
-                        <div class="one columns">#</div>
-                        <div class="five columns">
-                            <label>Answer</label>
-                        </div>
-                        <div class="two columns">
-                            <label>Points</label>
-                        </div>
-                    </div>
-                    <div data-bind="foreach: answers ">
-                        <div class="row">
-                            <div class="one columns" data-bind="text: answerNumber"></div>
-                            <div class="five columns">
-                                <input type="text" data-bind="value: text" />
-                            </div>
-                            <div class="two columns">
-                                <input type="text" data-bind="value: points" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
-
-    @*all questions*@
-    @*<div class="eight columns">
-        <label>
-            Search: 
-            <input type="text" data-bind="value:questionFilter" />
-        </label>
-		<ul data-bind="template: { name: 'roundItem-template', foreach: allRounds.rounds }"></ul>
-	</div>*@
-
-    <div class="eight columns">
-
-        @(Html.Telerik().Grid<FamilyFeud.Service.Models.Question>()
-        .DataBinding(dataBinding => dataBinding.Ajax().Select("_AjaxBinding", "Game"))
-        .Name("Grid")
+    @(Html.Telerik().Grid<FamilyFeud.Service.Models.Game>()
+        .DataBinding(dataBinding => dataBinding.Ajax()
+            .Select("_AllGames", "Game")
+            .Delete("_DeleteGame", "Game")
+        )
+            
+        .Name("GamesGrid")
+        .DataKeys(keys => keys.Add(x=>x.ID))
         .Columns(columns =>
         {
-            columns.Bound(o => o.ID)
-                   .ClientTemplate("<input type='checkbox' name='checkedRecords' value='<#= ID #>' />")
-                   .Title("")
-                   .Width(36)
-                   .Filterable(false)
-                   .HtmlAttributes(new { style = "text-align:center" });
+            columns.Bound(x => x.ID)
+                  .ClientTemplate("<a href='/game/Play/<#= ID #>' class='t-button' >Play!</a>")
+                  .Title("")
+                  .Width(20)
+                  .Filterable(false)
+                  .HtmlAttributes(new { style = "text-align:center" });
+            
+            columns.Bound(x => x.ID)
+                  .ClientTemplate("<a href='/game/Edit/<#= ID #>' class='t-button' >Edit</a>")
+                  .Title("")
+                  .Width(20)
+                  .Filterable(false)
+                  .HtmlAttributes(new { style = "text-align:center" });
 
-            columns.Bound(o => o.QuestionText).Title("Question");
-        })
-        .DetailView(details => details.ClientTemplate(
-            Html.Telerik().Grid<FamilyFeud.Service.Models.Answer>()
-                .Name("Answers_<#= ID #>")
-                .DataBinding(dataBinding => dataBinding.Ajax()
-                    .Select("_AnswersForQuestionAjax", "Game", new { questionID = "<#= ID #>" }))
-                .Columns(columns =>
+            columns.Command(commands =>
                 {
-                    columns.Bound(q => q.AnswerText).Title("Answer");
-                    columns.Bound(q => q.AnswerPointValue).Title("Points");
+                    commands.Delete();
                 })
-                .ToHtmlString()
-        ))
-                //.Pageable()
-                //.Sortable()
-                //.Groupable()
-        .Filterable()
-                //.Scrollable(scrolling => scrolling.Height(580))
-)
-    </div>
-    @(Html.Telerik().ScriptRegistrar())
+                .Title("")
+                .Width(20);
 
+            columns.Bound(x => x.Name);
+        })
+            //.Pageable()
+            //.Sortable()
+            //.Groupable()
+        .Filterable()
+            //.Scrollable(scrolling => scrolling.Height(580))
+
+)
 
 </div>
-

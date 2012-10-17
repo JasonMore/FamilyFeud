@@ -1,49 +1,83 @@
-﻿// viewmodels
+﻿// Helpers
+
+Array.prototype.move = function (old_index, new_index) {
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    return this;
+};
+
+var viewModelConvert = function (viewModelType) {
+    return {
+        create: function (options) {
+            return new viewModelType(options.data);
+        }
+    }
+};
+
+// viewmodels
 
 var answerViewModel = function (answerDto) {
     var self = this;
 
-    // observable
-    self.answerNumber = ko.observable(0);
-    self.text = ko.observable('');
-    self.points = ko.observable(0);
+    // observables
+
+    //when next is nothing, it is not persisted
+    self.text = ko.observable(); 
 
     // hydrate from dto
-    ko.mapping.fromJS(answerDto, {}, self);
+    ko.mapping.fromJS(answerDto, {
+        'include': ["isAvailable"]
+    }, self);
+
+    self.isAvailable = ko.computed(function () {
+        if (self.text() && self.points()) {
+            return true;
+        }
+        return false;
+    });
+
+    //self.isAvailable = function () {
+    //        if (self.text() && self.points()) {
+    //            return true;
+    //        }
+    //        return false;
+    //};
 };
 
 var roundViewModel = function (roundDto) {
     var self = this;
 
     // observables
-    self.questionText = ko.observable();
     self.isVisible = ko.observable(false);
-    self.answers = ko.observableArray();
 
     // hydrate from dto
     ko.mapping.fromJS(roundDto, {
-        'answers': {
-            create: function (options) {
-                return new answerViewModel(options.data);
-            }
-        }
+        'answers': viewModelConvert(answerViewModel)
     }, self);
 
     // clicks
     self.questionClicked = function () {
         self.isVisible(!self.isVisible());
     };
-
-    self.clone = function () {
-        return new roundViewModel(ko.toJS(self));
-    };
 };
 
-var gameViewModel = function () {
+var gameViewModel = function (gameDto, routes) {
     var self = this;
 
+    // Observables
     self.gameRounds = ko.observableArray();
 
+    // hydrate from dto
+    ko.mapping.fromJS(gameDto, {
+        'gameRounds': viewModelConvert(roundViewModel)
+    }, self);
+
+    // Clicks
     self.addRoundToGame = function (roundDto) {
         self.gameRounds.push(new roundViewModel(roundDto));
     };
@@ -60,26 +94,41 @@ var gameViewModel = function () {
         });
     };
 
-    // observables 
+    self.moveRoundUp = function (round) {
+        moveRound(round, -1);
+    };
 
+    self.moveRoundDown = function (round) {
+        moveRound(round, +1);
+    };
 
-    // load data
-    //self.init = function () {
-    //    $.ajax({
-    //        url: '/game/GetAllRounds',
-    //        success: function (allRounds) {
-    //            self.mapAllRounds(allRounds);
-    //        }
-    //    });
-    //};
+    var moveRound = function (round, direction) {
+        var currentIndex = self.gameRounds.indexOf(round);
+        self.gameRounds().move(currentIndex, currentIndex + direction);
+        self.gameRounds.compact_();
+        self.gameRounds.valueHasMutated();
+    };
 
-    //self.mapAllRounds = function (allRounds) {
-    //    var mappedRounds = $.map(allRounds, function (dtoRound) {
-    //        return new roundViewModel(dtoRound);
-    //    });
+    self.save = function () {
+        $.ajax({
+            type: 'post',
+            url: '/game/save',
+            contentType: 'application/json',
+            data:  ko.mapping.toJSON(self),
+            success: function (result) {
+                self.Id(result.id);
+                console.log('ya');
+            }
+        });
+    };
 
-    //    self.allRounds.rounds(mappedRounds);
-    //};
+    self.back = function () {
+        window.location(routes.list);
+    };
+
+    self.play = function () {
+        window.location(routes.play + "/" + self.Id());
+    };
 };
 
 var ui = {
@@ -101,14 +150,3 @@ var ui = {
         $('input[type="checkbox"][value=' + questionId + ']').prop('checked', false);
     }
 };
-
-var masterViewModel;
-
-$(function () {
-    masterViewModel = new gameViewModel();
-    ko.applyBindings(masterViewModel);
-
-    $('input[type="checkbox"]').live('click', ui.gridCheckBoxClicked);
-
-});
-

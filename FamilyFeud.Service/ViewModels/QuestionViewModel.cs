@@ -7,9 +7,9 @@ namespace FamilyFeud.Service.ViewModels
 {
 	public class QuestionViewModel
 	{
-		public int ID { get; set; }
+        public int ID { get; set; }
 		public string questionText { get; set; }
-		public IEnumerable<AnswerViewModel> answers { get; set; }
+		public List<AnswerViewModel> answers { get; set; }
 		public int score { get; set; }
 	}
 }

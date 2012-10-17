@@ -2,45 +2,6 @@
     ViewBag.Title = "Family Feud";
 }
 
-<script src="Scripts/FamilyFeud.js"></script>
-
-<script type="text/javascript">
-    //window.roundsData = @(Html.Raw(ViewBag.RoundsJsonData));
-
-    // hack for code talk
-    window.roundsData = [
-        {
-            questionText: "Name something people do when they have extra time in the morning",
-            answers: [
-                { answerNumber: 1, text: "Read", points: 53, isAvailable: true },
-                { answerNumber: 2, text: "Sleep", points: 10, isAvailable: true },
-                { answerNumber: 3, text: "Eat", points: 7, isAvailable: true },
-                { answerNumber: 4, text: "Excercise", points: 7, isAvailable: true },
-                { answerNumber: 4, text: "Watch TV", points: 6, isAvailable: true },
-                { answerNumber: 5, text: "Internet", points: 5, isAvailable: true },
-                { answerNumber: 6, text: "Drink Coffee", points: 3, isAvailable: true },
-                { answerNumber: 7, text: "Clean", points: 3, isAvailable: true }
-            ]
-        },
-        {
-            questionText: "Name the most productive programming language",
-            answers: [
-            { answerNumber: 1, text: "C#", points: 23, isAvailable: true },
-            { answerNumber: 2, text: "Cobra", points: 10, isAvailable: true },
-            { answerNumber: 3, text: "ColdFusion", points: 7, isAvailable: true },
-            { answerNumber: 4, text: "Python", points: 7, isAvailable: true },
-            { answerNumber: 5, text: "Ruby", points: 6, isAvailable: true },
-            { answerNumber: 6, text: "Javascript", points: 5, isAvailable: true },
-            { answerNumber: 7, text: "Fortran", points: 3, isAvailable: true },
-            { answerNumber: 8, text: "Java", points: 3, isAvailable: true }
-            ]
-        }
-    ];
-</script>
-
-<!-- Primary Page Layout
-	================================================== -->
-<!-- Delete everything in this .container and get started on your own site! -->
 <div class="container">
     <div class="sixteen columns">
         <div id="error" class="validation-summary-errors"></div>
@@ -135,10 +96,60 @@
 
 
 <div id="junk" style="display: none">
-    @*<audio id="bellSound" src="http://dl.dropbox.com/u/22788/FamilyFeud-Bell.mp3" autobuffer="autobuffer" controls=""></audio>
-    <audio id="buzzerSound" src="http://dl.dropbox.com/u/22788/FamilyFeud-Buzzer3.mp3" autobuffer="autobuffer" controls=""></audio>*@
-    <audio id="bellSound" src="/Content/FamilyFeud-Bell.mp3" autobuffer="autobuffer" controls=""></audio>
-    <audio id="buzzerSound" src="/Content/FamilyFeud-Buzzer3.mp3" autobuffer="autobuffer" controls=""></audio>
+    <audio id="bellSound" src="http://dl.dropbox.com/u/22788/FamilyFeud-Bell.mp3" autobuffer="autobuffer" controls=""></audio>
+    <audio id="buzzerSound" src="http://dl.dropbox.com/u/22788/FamilyFeud-Buzzer3.mp3" autobuffer="autobuffer" controls=""></audio>
+    @*<audio id="bellSound" src="/Content/FamilyFeud-Bell.mp3" autobuffer="autobuffer" controls=""></audio>
+    <audio id="buzzerSound" src="/Content/FamilyFeud-Buzzer3.mp3" autobuffer="autobuffer" controls=""></audio>*@
 </div>
 
-<!-- container -->
+@section scripts {
+
+    <script src="/Scripts/FamilyFeud.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            var data = @(Html.Raw(ViewBag.RoundsJsonData));
+
+            var masterViewModel = new gameViewModel();
+            masterViewModel.init(data);
+
+            ko.applyBindings(masterViewModel);
+            $.connection.hub.start(function () { 
+                masterViewModel.hub.startConnection();
+                self.notify = true;
+            });
+        });
+       
+
+        // hack for code talk
+        //window.roundsData = [
+        //    {
+        //        questionText: "Name something people do when they have extra time in the morning",
+        //        answers: [
+        //            { answerNumber: 1, text: "Read", points: 53, isAvailable: true },
+        //            { answerNumber: 2, text: "Sleep", points: 10, isAvailable: true },
+        //            { answerNumber: 3, text: "Eat", points: 7, isAvailable: true },
+        //            { answerNumber: 4, text: "Excercise", points: 7, isAvailable: true },
+        //            { answerNumber: 4, text: "Watch TV", points: 6, isAvailable: true },
+        //            { answerNumber: 5, text: "Internet", points: 5, isAvailable: true },
+        //            { answerNumber: 6, text: "Drink Coffee", points: 3, isAvailable: true },
+        //            { answerNumber: 7, text: "Clean", points: 3, isAvailable: true }
+        //        ]
+        //    },
+        //    {
+        //        questionText: "Name the most productive programming language",
+        //        answers: [
+        //        { answerNumber: 1, text: "C#", points: 23, isAvailable: true },
+        //        { answerNumber: 2, text: "Cobra", points: 10, isAvailable: true },
+        //        { answerNumber: 3, text: "ColdFusion", points: 7, isAvailable: true },
+        //        { answerNumber: 4, text: "Python", points: 7, isAvailable: true },
+        //        { answerNumber: 5, text: "Ruby", points: 6, isAvailable: true },
+        //        { answerNumber: 6, text: "Javascript", points: 5, isAvailable: true },
+        //        { answerNumber: 7, text: "Fortran", points: 3, isAvailable: true },
+        //        { answerNumber: 8, text: "Java", points: 3, isAvailable: true }
+        //        ]
+        //    }
+        //];
+    </script>
+
+}
+

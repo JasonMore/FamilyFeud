@@ -10,16 +10,9 @@ namespace FamilyFeud.Controllers
 {
     public class HomeController : Controller
     {
-		private IGameService _gameService;
-		public HomeController(IGameService gameService)
-		{
-			_gameService = gameService;
-		}
-
         public ActionResult Index()
         {
-			//ViewBag.RoundsJsonData = _gameService.GetGame(1);
-            return View();
+            return RedirectToAction("Index","Game");
         }
     }
 }

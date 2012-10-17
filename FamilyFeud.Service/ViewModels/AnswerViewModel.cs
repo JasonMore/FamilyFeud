@@ -7,7 +7,6 @@ namespace FamilyFeud.Service.ViewModels
 {
 	public class AnswerViewModel
 	{
-		public int ID { get; set; }
 		public int answerNumber { get; set; }
 		public string text { get; set; }
 		public int points { get; set; }
