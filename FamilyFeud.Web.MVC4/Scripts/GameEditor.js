@@ -71,6 +71,8 @@ var gameViewModel = function (gameDto, routes) {
 
     // Observables
     self.gameRounds = ko.observableArray();
+    self.isSaving = ko.observable(false);
+    self.saveText = ko.observable('Save');
 
     // hydrate from dto
     ko.mapping.fromJS(gameDto, {
@@ -110,24 +112,30 @@ var gameViewModel = function (gameDto, routes) {
     };
 
     self.save = function () {
-        $.ajax({
+        self.isSaving(true);
+        self.saveText('Saving...');
+
+        return $.ajax({
             type: 'post',
             url: '/game/save',
             contentType: 'application/json',
             data:  ko.mapping.toJSON(self),
             success: function (result) {
                 self.Id(result.id);
-                console.log('ya');
+                self.isSaving(false);
+                self.saveText('Save');
             }
         });
     };
 
     self.back = function () {
-        window.location(routes.list);
+        window.location.href = routes.list;
     };
 
     self.play = function () {
-        window.location(routes.play + "/" + self.Id());
+        self.save().pipe(function () {
+            window.location.href = routes.play + "/" + self.Id();
+        });
     };
 };
 

@@ -7,7 +7,7 @@
     @*make game*@
     <div class="twelve columns">
         <button data-bind="click: back">Back To List</button>
-        <button data-bind="click: save">Save</button>
+        <button data-bind="click: save, disabled: isSaving, text: saveText">Save</button>
         <button data-bind="click: play">Play!</button>
     </div>
     <div class="eight columns">
@@ -105,7 +105,7 @@
         var masterViewModel;
 
         $(function () {
-            masterViewModel = new gameViewModel(pageData);
+            masterViewModel = new gameViewModel(pageData, routes);
             ko.applyBindings(masterViewModel);
 
             $('input[type="checkbox"]').live('click', ui.gridCheckBoxClicked);
