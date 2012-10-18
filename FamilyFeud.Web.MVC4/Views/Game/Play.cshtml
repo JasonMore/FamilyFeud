@@ -108,47 +108,17 @@
     <script type="text/javascript">
         $(function() {
             var data = @(Html.Raw(ViewBag.RoundsJsonData));
+            var gameId = @ViewBag.GameId;
 
             var masterViewModel = new gameViewModel();
             masterViewModel.init(data);
 
             ko.applyBindings(masterViewModel);
             $.connection.hub.start(function () { 
-                masterViewModel.hub.startConnection();
+                masterViewModel.hub.startConnection(gameId);
                 self.notify = true;
             });
         });
-       
-
-        // hack for code talk
-        //window.roundsData = [
-        //    {
-        //        questionText: "Name something people do when they have extra time in the morning",
-        //        answers: [
-        //            { answerNumber: 1, text: "Read", points: 53, isAvailable: true },
-        //            { answerNumber: 2, text: "Sleep", points: 10, isAvailable: true },
-        //            { answerNumber: 3, text: "Eat", points: 7, isAvailable: true },
-        //            { answerNumber: 4, text: "Excercise", points: 7, isAvailable: true },
-        //            { answerNumber: 4, text: "Watch TV", points: 6, isAvailable: true },
-        //            { answerNumber: 5, text: "Internet", points: 5, isAvailable: true },
-        //            { answerNumber: 6, text: "Drink Coffee", points: 3, isAvailable: true },
-        //            { answerNumber: 7, text: "Clean", points: 3, isAvailable: true }
-        //        ]
-        //    },
-        //    {
-        //        questionText: "Name the most productive programming language",
-        //        answers: [
-        //        { answerNumber: 1, text: "C#", points: 23, isAvailable: true },
-        //        { answerNumber: 2, text: "Cobra", points: 10, isAvailable: true },
-        //        { answerNumber: 3, text: "ColdFusion", points: 7, isAvailable: true },
-        //        { answerNumber: 4, text: "Python", points: 7, isAvailable: true },
-        //        { answerNumber: 5, text: "Ruby", points: 6, isAvailable: true },
-        //        { answerNumber: 6, text: "Javascript", points: 5, isAvailable: true },
-        //        { answerNumber: 7, text: "Fortran", points: 3, isAvailable: true },
-        //        { answerNumber: 8, text: "Java", points: 3, isAvailable: true }
-        //        ]
-        //    }
-        //];
     </script>
 
 }

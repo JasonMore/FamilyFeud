@@ -84,18 +84,7 @@ var gameViewModel = function () {
     self.familyTwoName = ko.observable('Family Two');
     self.currentRoundIndex = ko.observable(0);
     self.isHost = ko.observable(false);
-    self.rounds = ko.observableArray([
-        //TODO: Figure out how to get rid of this fake round for binding
-            new roundViewModel({ questionText: '', score: '' }, [
-                new answerViewModel({ isAvailable: false, answerNumber: 0, text: '', points: 0 }),
-                new answerViewModel({ isAvailable: false, answerNumber: 0, text: '', points: 0 }),
-                new answerViewModel({ isAvailable: false, answerNumber: 0, text: '', points: 0 }),
-                new answerViewModel({ isAvailable: false, answerNumber: 0, text: '', points: 0 }),
-                new answerViewModel({ isAvailable: false, answerNumber: 0, text: '', points: 0 }),
-                new answerViewModel({ isAvailable: false, answerNumber: 0, text: '', points: 0 }),
-                new answerViewModel({ isAvailable: false, answerNumber: 0, text: '', points: 0 }),
-                new answerViewModel({ isAvailable: false, answerNumber: 0, text: '', points: 0 })
-            ])]);
+    self.rounds = ko.observableArray();
 
     //subscriptions
     self.familyOneName.subscribe(function (value) {
@@ -129,8 +118,8 @@ var gameViewModel = function () {
 
     //clicks
     self.answerClick = function (answer, e) {
-        // hack for code talk
-        //if (self.isAudience()) return;
+        // comment out below for code talks
+        if (self.isAudience()) return;
 
         var dtoAnswer = ko.mapping.toJS(answer);
         self.hub.sendShowAnswer(dtoAnswer).done(function () {
@@ -286,7 +275,8 @@ var gameViewModel = function () {
     });
 
     self.currentRound = ko.computed(function () {
-        return self.rounds()[self.currentRoundIndex()];
+        var currentRound = self.rounds()[self.currentRoundIndex()];
+        return currentRound ? currentRound: new roundViewModel();
     });
 
     self.currentAnswers = ko.computed(function () {
@@ -303,23 +293,29 @@ var gameViewModel = function () {
     });
 
     self.firstFourAnswers = ko.computed(function () {
+        if (!self.currentAnswers()) {
+            return [];
+        }
+
         var answers = [self.currentAnswers()[0],
             self.currentAnswers()[1],
             self.currentAnswers()[2],
             self.currentAnswers()[3]];
 
         return answers;
-
     });
 
     self.lastFourAnswers = ko.computed(function () {
+        if (!self.currentAnswers()) {
+            return [];
+        }
+
         var answers = [self.currentAnswers()[4],
             self.currentAnswers()[5],
             self.currentAnswers()[6],
             self.currentAnswers()[7]];
 
         return answers;
-
     });
 
     self.questionText = ko.dependentObservable(function () {

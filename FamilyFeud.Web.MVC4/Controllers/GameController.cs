@@ -85,6 +85,7 @@ namespace FamilyFeud.Controllers
         public ActionResult Play(int id)
         {
             ViewBag.RoundsJsonData = _gameService.GetGame(id);
+            ViewBag.GameId = id;
             return View();
         }
     }

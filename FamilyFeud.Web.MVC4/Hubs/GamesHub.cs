@@ -10,127 +10,97 @@ using FamilyFeud.Service.ViewModels;
 namespace FamilyFeud.Hubs
 {
     public class GamesHub : Hub
-	{
-		private static readonly string AUDIENCE = "audience";
-		private static readonly string HOST = "host";
+    {
+        private static readonly string AUDIENCE = "audience";
+        private static readonly string HOST = "host";
 
-		private IGameService _gameService;
+        private IGameService _gameService;
 
-		public GamesHub(IGameService gameService)
-		{
-			_gameService = gameService;
-		}
-
-        public void StartConnection()
+        public GamesHub(IGameService gameService)
         {
-            Caller.clientId = Guid.NewGuid();
-            this.AddToGroup(AUDIENCE);
+            _gameService = gameService;
         }
 
-		//public bool SendGetRounds()
-		//{
-		//	try
-		//	{
-		//		var rounds = _gameService.GetRounds();
-		//		Caller.gotRounds(rounds);
-		//		return true;
-		//	}
-		//	catch (Exception)
-		//	{
-		//		Caller.reportError("Unable to get rounds;");
-		//		return false;
-		//	}
-		//}
-
-        public bool SendShowAnswer(AnswerViewModel answer)
+        public void StartConnection(int gameId)
         {
-            try
-            {
-                Clients.gotShowAnswer(answer);
-                return true;
-            }
-            catch (Exception)
-            {
-                Caller.reportError("Unable to show answer;");
-                return false;
-            }
+            Caller.clientId = Guid.NewGuid();
+            Caller.gameId = gameId.ToString();
+
+            this.AddToGroup(AUDIENCE);
+            this.AddToGroup(Caller.gameId);
+        }
+
+        public void SendShowAnswer(AnswerViewModel answer)
+        {
+            Clients[Caller.gameId].gotShowAnswer(answer);
         }
 
         public void SendGiveScoreFamilyOne()
         {
-            Clients.gotGiveScoreFamilyOne();
+            Clients[Caller.gameId].gotGiveScoreFamilyOne();
         }
 
         public void SendGiveScoreFamilyTwo()
         {
-            Clients.gotGiveScoreFamilyTwo();
+            Clients[Caller.gameId].gotGiveScoreFamilyTwo();
         }
 
         public void SendRemoveScoreFamilyOne()
         {
-            Clients.gotRemoveScoreFamilyOne();
+            Clients[Caller.gameId].gotRemoveScoreFamilyOne();
         }
 
         public void SendRemoveScoreFamilyTwo()
         {
-            Clients.gotRemoveScoreFamilyTwo();
+            Clients[Caller.gameId].gotRemoveScoreFamilyTwo();
         }
 
-		public void SendFamilyOneName(string name)
-		{
-			Clients.gotFamilyOneName(name);
-		}
+        public void SendFamilyOneName(string name)
+        {
+            Clients[Caller.gameId].gotFamilyOneName(name);
+        }
 
-		public void SendFamilyTwoName(string name)
-		{
-			Clients.gotFamilyTwoName(name);
-		}
+        public void SendFamilyTwoName(string name)
+        {
+            Clients[Caller.gameId].gotFamilyTwoName(name);
+        }
 
         public void SendBuzzFamilyOne()
         {
-            Clients.gotBuzzFamilyOne();
+            Clients[Caller.gameId].gotBuzzFamilyOne();
         }
 
         public void SendRemoveFamilyOneWrongAnswer()
         {
-            Clients.gotRemoveFamilyOneWrongAnswer();
+            Clients[Caller.gameId].gotRemoveFamilyOneWrongAnswer();
         }
 
         public void SendBuzzFamilyTwo()
         {
-            Clients.gotBuzzFamilyTwo();
+            Clients[Caller.gameId].gotBuzzFamilyTwo();
         }
 
         public void SendRemoveFamilyTwoWrongAnswer()
         {
-            Clients.gotRemoveFamilyTwoWrongAnswer();
+            Clients[Caller.gameId].gotRemoveFamilyTwoWrongAnswer();
         }
 
-        public bool SendIsHost(bool isHost)
+        public void SendIsHost(bool isHost)
         {
-            try
-            {
-                //remove host from audience group to prevent overflows
-                RemoveFromGroup(AUDIENCE);
-                AddToGroup(HOST);
-                return true;
-            }
-            catch (Exception)
-            {
-                Caller.reportError("Unable to send Is Host");
-                return false;
-            }
+            //remove host from audience group to prevent overflows
+            RemoveFromGroup(AUDIENCE);
+            AddToGroup(HOST);
         }
 
         public void SendNextRound()
         {
-            Clients.gotNextRound();
+            Clients[Caller.gameId].gotNextRound();
         }
 
         public void SendLastRound()
         {
-            Clients.gotLastRound();
+            Clients[Caller.gameId].gotLastRound();
         }
-        
+
     }
 }
